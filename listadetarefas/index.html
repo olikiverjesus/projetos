@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lista de Tarefas</title>
+  <title>Lista de Tarefas Completa</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -26,6 +26,10 @@
       justify-content: space-between;
       align-items: center;
     }
+    .completed {
+      text-decoration: line-through;
+      color: #aaa;
+    }
     button {
       background-color: #ff4d4d;
       border: none;
@@ -36,32 +40,94 @@
     button:hover {
       background-color: #e60000;
     }
+    .edit-button {
+      background-color: #4CAF50;
+    }
+    .edit-button:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
-  <h1>Lista de Tarefas</h1>
+  <h1>Lista de Tarefas Completa</h1>
   <input type="text" id="tarefaInput" placeholder="Nova tarefa">
   <button onclick="adicionarTarefa()">Adicionar</button>
   <ul id="tarefasList"></ul>
   
   <script>
+    document.addEventListener('DOMContentLoaded', carregarTarefas);
+
+    function carregarTarefas() {
+      const tarefas = JSON.parse(localStorage.getItem('tarefas')) || [];
+      tarefas.forEach(tarefa => {
+        criarElementoTarefa(tarefa);
+      });
+    }
+
+    function salvarTarefas(tarefas) {
+      localStorage.setItem('tarefas', JSON.stringify(tarefas));
+    }
+
+    function criarElementoTarefa(tarefa) {
+      const li = document.createElement('li');
+      li.textContent = tarefa.texto;
+      if (tarefa.concluida) {
+        li.classList.add('completed');
+      }
+
+      const botaoConcluir = document.createElement('button');
+      botaoConcluir.textContent = tarefa.concluida ? 'Desmarcar' : 'Concluir';
+      botaoConcluir.onclick = function() {
+        tarefa.concluida = !tarefa.concluida;
+        li.classList.toggle('completed');
+        botaoConcluir.textContent = tarefa.concluida ? 'Desmarcar' : 'Concluir';
+        atualizarTarefas();
+      };
+      li.appendChild(botaoConcluir);
+
+      const botaoEditar = document.createElement('button');
+      botaoEditar.textContent = 'Editar';
+      botaoEditar.classList.add('edit-button');
+      botaoEditar.onclick = function() {
+        const novoTexto = prompt('Editar tarefa:', tarefa.texto);
+        if (novoTexto) {
+          tarefa.texto = novoTexto;
+          li.firstChild.textContent = novoTexto;
+          atualizarTarefas();
+        }
+      };
+      li.appendChild(botaoEditar);
+
+      const botaoExcluir = document.createElement('button');
+      botaoExcluir.textContent = 'Excluir';
+      botaoExcluir.onclick = function() {
+        li.remove();
+        atualizarTarefas();
+      };
+      li.appendChild(botaoExcluir);
+
+      document.getElementById('tarefasList').appendChild(li);
+    }
+
     function adicionarTarefa() {
       const tarefaInput = document.getElementById('tarefaInput');
-      const novaTarefa = tarefaInput.value;
-      if (novaTarefa) {
-        const li = document.createElement('li');
-        li.textContent = novaTarefa;
-        
-        const botaoExcluir = document.createElement('button');
-        botaoExcluir.textContent = 'Excluir';
-        botaoExcluir.onclick = function() {
-          li.remove();
-        };
-        li.appendChild(botaoExcluir);
-        
-        document.getElementById('tarefasList').appendChild(li);
+      const texto = tarefaInput.value;
+      if (texto) {
+        const tarefa = { texto, concluida: false };
+        criarElementoTarefa(tarefa);
+        atualizarTarefas();
         tarefaInput.value = '';
       }
+    }
+
+    function atualizarTarefas() {
+      const tarefasList = Array.from(document.querySelectorAll('#tarefasList li')).map(li => {
+        return {
+          texto: li.firstChild.textContent,
+          concluida: li.classList.contains('completed')
+        };
+      });
+      salvarTarefas(tarefasList);
     }
   </script>
 </body>
