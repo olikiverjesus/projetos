@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Tarefas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+    h1 {
+      text-align: center;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      padding: 8px;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    button {
+      background-color: #ff4d4d;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #e60000;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lista de Tarefas</h1>
+  <input type="text" id="tarefaInput" placeholder="Nova tarefa">
+  <button onclick="adicionarTarefa()">Adicionar</button>
+  <ul id="tarefasList"></ul>
+  
+  <script>
+    function adicionarTarefa() {
+      const tarefaInput = document.getElementById('tarefaInput');
+      const novaTarefa = tarefaInput.value;
+      if (novaTarefa) {
+        const li = document.createElement('li');
+        li.textContent = novaTarefa;
+        
+        const botaoExcluir = document.createElement('button');
+        botaoExcluir.textContent = 'Excluir';
+        botaoExcluir.onclick = function() {
+          li.remove();
+        };
+        li.appendChild(botaoExcluir);
+        
+        document.getElementById('tarefasList').appendChild(li);
+        tarefaInput.value = '';
+      }
+    }
+  </script>
+</body>
+</html>
