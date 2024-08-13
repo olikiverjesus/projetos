@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notas e Tarefas com Markdown</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Notas e Tarefas com Markdown</h1>
+
+  <div class="container">
+    <div class="form-group">
+      <textarea id="editor" placeholder="Escreva sua nota em Markdown..."></textarea>
+      <button onclick="salvarNota()">Salvar Nota</button>
+    </div>
+
+    <div class="form-group">
+      <h2>Notas Salvas</h2>
+      <div id="notas"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
