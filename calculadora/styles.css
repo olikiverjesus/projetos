@@ -22,19 +22,20 @@ body {
     padding: 20px;
     background-color: #fff;
     width: 100%;
-    max-width: 450px;
+    max-width: 500px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
   
   #display {
     width: 100%;
-    padding: 20px;
+    padding: 15px;
     margin-bottom: 15px;
     text-align: right;
     border: 1px solid #ddd;
     border-radius: 10px;
     font-size: 1.5em;
     background-color: #f9f9f9;
+    box-sizing: border-box;
   }
   
   .buttons {
@@ -50,6 +51,7 @@ body {
     font-size: 1.2em;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.2s;
+    box-sizing: border-box;
   }
   
   button:hover {
@@ -82,7 +84,7 @@ body {
   .history {
     margin-top: 30px;
     width: 100%;
-    max-width: 450px;
+    max-width: 500px;
   }
   
   .history ul {

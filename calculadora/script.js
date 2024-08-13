@@ -23,8 +23,13 @@ function appendToDisplay(value) {
       // Calcular funções trigonométricas
       expression = expression.replace(/sin\(([^)]+)\)/g, (match, p1) => Math.sin(eval(p1)));
       expression = expression.replace(/cos\(([^)]+)\)/g, (match, p1) => Math.cos(eval(p1)));
+      expression = expression.replace(/tan\(([^)]+)\)/g, (match, p1) => Math.tan(eval(p1)));
       
-      const result = eval(expression); // Avalia a expressão
+      // Calcular raiz quadrada
+      expression = expression.replace(/sqrt\(([^)]+)\)/g, (match, p1) => Math.sqrt(eval(p1)));
+      
+      // Avalia a expressão
+      const result = eval(expression);
       addToHistory(display.value + ' = ' + result);
       display.value = result;
     } catch (e) {
