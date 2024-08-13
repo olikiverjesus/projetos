@@ -1,42 +1,51 @@
-// Função para converter Markdown em HTML
-function converterMarkdown(markdown) {
-  // Você pode usar uma biblioteca como o marked.js para conversão de Markdown para HTML
-  return marked(markdown);
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const taskForm = document.getElementById('task-form');
+    const taskInput = document.getElementById('task-input');
+    const taskList = document.getElementById('task-list');
 
-// Função para salvar nota
-function salvarNota() {
-  const editor = document.getElementById('editor');
-  const notasContainer = document.getElementById('notas');
-  
-  if (editor.value.trim() === '') {
-    alert('Por favor, insira um texto.');
-    return;
-  }
+    // Carregar tarefas salvas
+    loadTasks();
 
-  // Salvar nota no Local Storage
-  let notas = JSON.parse(localStorage.getItem('notas')) || [];
-  notas.push(editor.value);
-  localStorage.setItem('notas', JSON.stringify(notas));
+    taskForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const taskText = taskInput.value;
+        if (taskText === '') return;
 
-  // Atualizar visualização das notas
-  atualizarNotas();
-  editor.value = ''; // Limpar textarea
-}
+        addTask(taskText);
+        taskInput.value = '';
+    });
 
-// Função para atualizar visualização das notas
-function atualizarNotas() {
-  const notasContainer = document.getElementById('notas');
-  notasContainer.innerHTML = '';
+    // Função para adicionar tarefa
+    function addTask(text) {
+        const li = document.createElement('li');
+        li.textContent = text;
 
-  const notas = JSON.parse(localStorage.getItem('notas')) || [];
-  notas.forEach(nota => {
-    const noteElement = document.createElement('div');
-    noteElement.classList.add('note');
-    noteElement.innerHTML = converterMarkdown(nota);
-    notasContainer.appendChild(noteElement);
-  });
-}
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Excluir';
+        deleteButton.classList.add('delete');
+        deleteButton.addEventListener('click', () => {
+            li.remove();
+            saveTasks();
+        });
 
-// Inicializar visualização das notas ao carregar a página
-document.addEventListener('DOMContentLoaded', atualizarNotas);
+        li.appendChild(deleteButton);
+        taskList.appendChild(li);
+
+        saveTasks();
+    }
+
+    // Função para salvar tarefas no localStorage
+    function saveTasks() {
+        const tasks = [];
+        taskList.querySelectorAll('li').forEach(li => {
+            tasks.push(li.textContent.replace('Excluir', '').trim());
+        });
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    // Função para carregar tarefas do localStorage
+    function loadTasks() {
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks.forEach(task => addTask(task));
+    }
+});
