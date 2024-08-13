@@ -44,11 +44,12 @@ body {
   }
   
   button {
-    padding: 20px;
+    padding: 15px;
     border: none;
     border-radius: 5px;
     font-size: 1.2em;
     cursor: pointer;
+    transition: background-color 0.3s;
   }
   
   .btn-danger {
@@ -58,6 +59,11 @@ body {
   
   .btn-success {
     background-color: #4caf50;
+    color: white;
+  }
+  
+  .btn-warning {
+    background-color: #ffb74d;
     color: white;
   }
   
@@ -88,9 +94,26 @@ body {
     border-radius: 5px;
     font-size: 1.1em;
     cursor: pointer;
+    transition: background-color 0.3s;
   }
   
   .history li:hover {
     background-color: #f0f0f0;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 600px) {
+    .buttons {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  
+    #display {
+      font-size: 1.2em;
+    }
+  
+    button {
+      padding: 12px;
+      font-size: 1em;
+    }
   }
   
