@@ -15,7 +15,16 @@ function appendToDisplay(value) {
   function calculateResult() {
     const display = document.getElementById('display');
     try {
-      const result = eval(display.value); // Avalia a expressão
+      let expression = display.value;
+      
+      // Convert percentages to decimal
+      expression = expression.replace(/(\d+)%/g, (match, p1) => p1 / 100);
+      
+      // Calculate trigonometric functions
+      expression = expression.replace(/sin\(([^)]+)\)/g, (match, p1) => Math.sin(eval(p1)));
+      expression = expression.replace(/cos\(([^)]+)\)/g, (match, p1) => Math.cos(eval(p1)));
+      
+      const result = eval(expression); // Avalia a expressão
       addToHistory(display.value + ' = ' + result);
       display.value = result;
     } catch (e) {
@@ -32,8 +41,16 @@ function appendToDisplay(value) {
   
     // Armazenar histórico no Local Storage
     let history = JSON.parse(localStorage.getItem('history')) || [];
+    
+    // Limitar a 10 entradas
+    history = history.slice(-9);
     history.push(entry);
     localStorage.setItem('history', JSON.stringify(history));
+  
+    // Limitar o número de itens na UI para 10
+    if (historyList.children.length > 10) {
+      historyList.removeChild(historyList.firstChild);
+    }
   }
   
   // Função para usar um item do histórico como novo cálculo
