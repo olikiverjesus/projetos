@@ -16,18 +16,21 @@ function appendToDisplay(value) {
     const display = document.getElementById('display');
     try {
       let expression = display.value;
-      
+  
       // Converta porcentagens para decimal
       expression = expression.replace(/(\d+)%/g, (match, p1) => p1 / 100);
-      
+  
       // Calcular funções trigonométricas
       expression = expression.replace(/sin\(([^)]+)\)/g, (match, p1) => Math.sin(eval(p1)));
       expression = expression.replace(/cos\(([^)]+)\)/g, (match, p1) => Math.cos(eval(p1)));
       expression = expression.replace(/tan\(([^)]+)\)/g, (match, p1) => Math.tan(eval(p1)));
-      
+  
       // Calcular raiz quadrada
       expression = expression.replace(/sqrt\(([^)]+)\)/g, (match, p1) => Math.sqrt(eval(p1)));
-      
+  
+      // Calcular potência
+      expression = expression.replace(/pow\(([^,]+),([^)]*)\)/g, (match, p1, p2) => Math.pow(eval(p1), eval(p2)));
+  
       // Avalia a expressão
       const result = eval(expression);
       addToHistory(display.value + ' = ' + result);
