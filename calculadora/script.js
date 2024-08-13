@@ -17,10 +17,10 @@ function appendToDisplay(value) {
     try {
       let expression = display.value;
       
-      // Convert percentages to decimal
+      // Converta porcentagens para decimal
       expression = expression.replace(/(\d+)%/g, (match, p1) => p1 / 100);
       
-      // Calculate trigonometric functions
+      // Calcular funções trigonométricas
       expression = expression.replace(/sin\(([^)]+)\)/g, (match, p1) => Math.sin(eval(p1)));
       expression = expression.replace(/cos\(([^)]+)\)/g, (match, p1) => Math.cos(eval(p1)));
       
