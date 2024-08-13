@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Tarefas</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notas e Tarefas com Markdown</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Lista de Tarefas</h1>
-        <form id="task-form">
-            <input type="text" id="task-input" placeholder="Digite sua tarefa" required>
-            <button type="submit">Adicionar Tarefa</button>
-        </form>
-        <ul id="task-list"></ul>
+  <h1>Notas e Tarefas com Markdown</h1>
+
+  <div class="container">
+    <div class="form-group">
+      <textarea id="editor" placeholder="Escreva sua nota em Markdown..."></textarea>
+      <button onclick="salvarNota()">Salvar Nota</button>
     </div>
-    <script src="js/script.js"></script>
+
+    <div class="form-group">
+      <h2>Notas Salvas</h2>
+      <div id="notas"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>

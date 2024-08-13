@@ -1,6 +1,5 @@
 // Função para converter Markdown em HTML
 function converterMarkdown(markdown) {
-    // Usa a biblioteca marked.js para converter Markdown em HTML
     return marked(markdown);
   }
   
