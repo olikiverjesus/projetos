@@ -1,5 +1,3 @@
-// script.js
-
 let notes = JSON.parse(localStorage.getItem('notes')) || [];
 let currentNoteIndex = null;
 
@@ -59,6 +57,22 @@ function renderMarkdown(content) {
 
 function toggleTheme() {
     document.body.classList.toggle('dark-mode');
+}
+
+function applyBold() {
+    const editor = document.getElementById('note-editor');
+    const selectedText = editor.value.substring(editor.selectionStart, editor.selectionEnd);
+    const newText = `**${selectedText}**`;
+    editor.setRangeText(newText);
+    renderMarkdown(editor.value);
+}
+
+function applyList() {
+    const editor = document.getElementById('note-editor');
+    const selectedText = editor.value.substring(editor.selectionStart, editor.selectionEnd);
+    const newText = `- ${selectedText}`;
+    editor.setRangeText(newText);
+    renderMarkdown(editor.value);
 }
 
 document.getElementById('note-editor').addEventListener('input', () => {

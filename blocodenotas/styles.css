@@ -22,7 +22,7 @@ body {
 }
 
 header {
-    background-color: #6200ee;
+    background-color: #007bff;
     color: #fff;
     padding: 20px;
     text-align: center;
@@ -51,7 +51,7 @@ aside h2 {
 }
 
 #notes-list li {
-    background-color: #6200ee;
+    background-color: #007bff;
     color: #fff;
     padding: 10px;
     margin-bottom: 10px;
@@ -61,7 +61,7 @@ aside h2 {
 }
 
 #notes-list li:hover {
-    background-color: #3700b3;
+    background-color: #0056b3;
 }
 
 main {
@@ -91,7 +91,7 @@ main {
     flex: 1;
     padding: 10px;
     font-size: 16px;
-    background-color: #6200ee;
+    background-color: #007bff;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -100,7 +100,26 @@ main {
 }
 
 #buttons-container button:hover {
-    background-color: #3700b3;
+    background-color: #0056b3;
+}
+
+#toolbar {
+    margin-bottom: 10px;
+}
+
+#toolbar button {
+    padding: 5px 10px;
+    margin-right: 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#toolbar button:hover {
+    background-color: #0056b3;
 }
 
 #preview {
@@ -130,6 +149,7 @@ main {
     background-color: #555;
 }
 
-.dark-mode #buttons-container button {
+.dark-mode #buttons-container button,
+.dark-mode #toolbar button {
     background-color: #333;
 }
