@@ -1,50 +1,129 @@
+/* Fonte e cores principais */
 body {
-  font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
-  background-color: #f4f4f4;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f5f7fa;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+header {
+  background-color: #4caf50;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  text-align: center;
+  margin: 0;
+  font-weight: 700;
 }
 
 .container {
-  margin-top: 20px;
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-input, select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+.balance {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-button {
+.balance-amount {
+  font-size: 2em;
+  font-weight: 700;
+  color: #4caf50;
+}
+
+.transaction-history {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.transaction-history ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.transaction-history li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.transaction-history li:last-child {
+  border-bottom: none;
+}
+
+.transaction-history .minus {
+  color: #f44336;
+}
+
+.transaction-history .plus {
+  color: #4caf50;
+}
+
+.add-transaction {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 700;
+}
+
+input[type="text"],
+input[type="number"] {
   width: 100%;
   padding: 10px;
-  background-color: #4CAF50;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  box-sizing: border-box;
+}
+
+button[type="submit"].btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #4caf50;
   color: white;
   border: none;
+  border-radius: 5px;
+  font-size: 1.2em;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-button:hover {
+button[type="submit"].btn:hover {
   background-color: #45a049;
 }
 
-.transacao {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin-bottom: 10px;
-  border-radius: 5px;
-}
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
 
-.transacao.entrada {
-  border-left: 5px solid #4CAF50;
-}
-
-.transacao.saida {
-  border-left: 5px solid #f44336;
+  h1 {
+    font-size: 1.5em;
+  }
 }

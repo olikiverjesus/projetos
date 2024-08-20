@@ -3,35 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard de Finanças Pessoais</title>
+  <title>Finanças Pessoais</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Dashboard de Finanças Pessoais</h1>
+  <header>
+    <h1>Gerenciador de Finanças Pessoais</h1>
+  </header>
 
   <div class="container">
-    <div class="form-group">
-      <h2>Adicionar Transação</h2>
-      <input type="text" id="descricao" placeholder="Descrição">
-      <input type="number" id="valor" placeholder="Valor" step="0.01">
-      <select id="tipo">
-        <option value="entrada">Entrada</option>
-        <option value="saida">Saída</option>
-      </select>
-      <button onclick="adicionarTransacao()">Adicionar Transação</button>
-    </div>
+    <section class="balance">
+      <h2>Saldo Atual</h2>
+      <div id="balance" class="balance-amount">R$ 0,00</div>
+    </section>
 
-    <div class="form-group">
-      <h2>Transações</h2>
-      <div id="transacoes"></div>
-    </div>
+    <section class="transaction-history">
+      <h2>Histórico de Transações</h2>
+      <ul id="transaction-list"></ul>
+    </section>
 
-    <div class="form-group">
-      <h2>Resumo</h2>
-      <p>Entradas: <span id="total-entradas">R$ 0,00</span></p>
-      <p>Saídas: <span id="total-saidas">R$ 0,00</span></p>
-      <p>Saldo: <span id="saldo">R$ 0,00</span></p>
-    </div>
+    <section class="add-transaction">
+      <h2>Adicionar Nova Transação</h2>
+      <form id="transaction-form">
+        <div class="form-group">
+          <label for="transaction-text">Descrição</label>
+          <input type="text" id="transaction-text" placeholder="Ex: Salário, Compras">
+        </div>
+        <div class="form-group">
+          <label for="transaction-amount">Valor <br> (negativo - despesa, positivo - receita)</label>
+          <input type="number" id="transaction-amount" placeholder="Ex: -100, 500">
+        </div>
+        <button type="submit" class="btn">Adicionar Transação</button>
+      </form>
+    </section>
   </div>
 
   <script src="script.js"></script>
