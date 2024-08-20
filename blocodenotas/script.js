@@ -2,6 +2,7 @@
 
 let notes = JSON.parse(localStorage.getItem('notes')) || [];
 let currentNoteIndex = null;
+let isEditing = false;
 
 function renderNotesList() {
     const notesList = document.getElementById('notes-list');
@@ -9,7 +10,7 @@ function renderNotesList() {
     notes.forEach((note, index) => {
         const li = document.createElement('li');
         li.textContent = note.title || `Nota sem título (${index + 1})`;
-        li.addEventListener('click', () => loadNote(index));
+        li.addEventListener('click', () => loadNoteForView(index));
         notesList.appendChild(li);
     });
 }
@@ -18,29 +19,39 @@ function saveNote() {
     const noteContent = document.getElementById('note-editor').value;
     const title = noteContent.split('\n')[0] || "Nota sem título";
 
-    if (currentNoteIndex === null) {
-        notes.push({ title, content: noteContent });
-        currentNoteIndex = notes.length - 1;
-    } else {
+    if (isEditing) {
         notes[currentNoteIndex].content = noteContent;
         notes[currentNoteIndex].title = title;
+    } else {
+        notes.push({ title, content: noteContent });
+        currentNoteIndex = notes.length - 1;
     }
     
     localStorage.setItem('notes', JSON.stringify(notes));
     renderNotesList();
 }
 
-function loadNote(index) {
+function loadNoteForView(index) {
     currentNoteIndex = index;
     const note = notes[index];
     document.getElementById('note-editor').value = note.content;
     renderMarkdown(note.content);
+    isEditing = false;
+}
+
+function loadNoteForEdit() {
+    if (currentNoteIndex !== null) {
+        isEditing = true;
+        const note = notes[currentNoteIndex];
+        document.getElementById('note-editor').value = note.content;
+    }
 }
 
 function newNote() {
     currentNoteIndex = null;
     document.getElementById('note-editor').value = '';
     document.getElementById('preview').innerHTML = '';
+    isEditing = false;
 }
 
 function deleteNote() {
@@ -65,6 +76,7 @@ document.getElementById('note-editor').addEventListener('input', () => {
 });
 
 document.getElementById('save-note').addEventListener('click', saveNote);
+document.getElementById('edit-note').addEventListener('click', loadNoteForEdit);
 document.getElementById('new-note').addEventListener('click', newNote);
 document.getElementById('delete-note').addEventListener('click', deleteNote);
 document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
