@@ -12,7 +12,8 @@ function addTransaction(e) {
   const text = document.getElementById('transaction-text').value.trim();
   const amount = +document.getElementById('transaction-amount').value.trim();
   const category = document.getElementById('transaction-category').value;
-  const date = new Date(document.getElementById('transaction-date').value + '-01'); // Set day to 01
+  const dateInput = document.getElementById('transaction-date').value;
+  const date = new Date(dateInput + '-01'); // Set day to 01
 
   if (text === '' || isNaN(amount) || isNaN(date.getTime())) {
     alert('Por favor, adicione uma descrição, valor válido e uma data.');
@@ -36,8 +37,8 @@ function addTransaction(e) {
 
 function addTransactionDOM(transaction) {
   const list = document.createElement('ul');
-  const monthYear = transaction.date.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
-  
+  const monthYear = transaction.date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+
   let monthGroup = document.querySelector(`[data-month="${monthYear}"]`);
 
   if (!monthGroup) {
