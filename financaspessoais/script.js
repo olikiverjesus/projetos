@@ -12,6 +12,7 @@ function addTransaction(e) {
 
   const text = document.getElementById('transaction-text').value.trim();
   const amount = +document.getElementById('transaction-amount').value.trim();
+  const date = new Date(document.getElementById('transaction-date').value);
 
   if (text === '' || isNaN(amount)) {
     alert('Por favor, adicione uma descrição e um valor válido');
@@ -22,7 +23,7 @@ function addTransaction(e) {
     id: generateID(),
     text,
     amount,
-    date: new Date(),
+    date
   };
 
   transactions.push(transaction);
@@ -36,8 +37,7 @@ function addTransaction(e) {
 // Adicionar transação ao DOM
 function addTransactionDOM(transaction) {
   const list = document.createElement('ul');
-  const item = document.createElement('li');
-  const monthYear = new Date(transaction.date).toLocaleString('default', { month: 'long', year: 'numeric' });
+  const monthYear = transaction.date.toLocaleString('pt-BR', { month: 'long', year: 'numeric' });
   
   let monthGroup = document.querySelector(`[data-month="${monthYear}"]`);
 
@@ -56,6 +56,7 @@ function addTransactionDOM(transaction) {
 
   const sign = transaction.amount < 0 ? '-' : '+';
 
+  const item = document.createElement('li');
   item.classList.add(transaction.amount < 0 ? 'minus' : 'plus');
   item.innerHTML = `
     ${transaction.text} <span>${sign}R$ ${Math.abs(transaction.amount).toFixed(2)}</span>
