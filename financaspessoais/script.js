@@ -12,7 +12,7 @@ function addTransaction(e) {
   const text = document.getElementById('transaction-text').value.trim();
   const amount = +document.getElementById('transaction-amount').value.trim();
   const category = document.getElementById('transaction-category').value;
-  const date = new Date(document.getElementById('transaction-date').value + '-01');
+  const date = new Date(document.getElementById('transaction-date').value);
 
   if (text === '' || isNaN(amount) || isNaN(date.getTime())) {
     alert('Por favor, adicione uma descrição, valor válido e uma data.');
@@ -93,6 +93,9 @@ function loadMoreHistory() {
   currentPage++;
   const nextTransactions = transactions.slice(currentPage * transactionsPerPage, (currentPage + 1) * transactionsPerPage);
   nextTransactions.forEach(addTransactionDOM);
+  if (nextTransactions.length === 0) {
+    document.getElementById('load-more').style.display = 'none';
+  }
 }
 
 document.getElementById('transaction-form').addEventListener('submit', addTransaction);
