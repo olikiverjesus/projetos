@@ -1,0 +1,115 @@
+/* styles.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notes-container {
+    display: flex;
+    flex: 1;
+}
+
+aside {
+    width: 25%;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+}
+
+aside h2 {
+    margin-top: 0;
+}
+
+#notes-list {
+    list-style: none;
+    padding: 0;
+}
+
+#notes-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+#new-note {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+}
+
+main {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#note-editor {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+    width: 100%;
+}
+
+#preview {
+    flex: 1;
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    overflow-y: auto;
+}
+
+.dark-mode {
+    background-color: #333;
+    color: #f5f5f5;
+}
+
+.dark-mode header {
+    background-color: #555;
+}
+
+.dark-mode aside {
+    background-color: #444;
+}
+
+.dark-mode main {
+    background-color: #333;
+    color: #f5f5f5;
+}
+
+.dark-mode #note-editor {
+    background-color: #555;
+    color: #f5f5f5;
+}
+
+.dark-mode #preview {
+    background-color: #444;
+    color: #f5f5f5;
+}
+

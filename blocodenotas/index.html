@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloco de Notas Moderno</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Bloco de Notas Moderno</h1>
+            <button id="theme-toggle">Alterar Tema</button>
+        </header>
+
+        <div class="notes-container">
+            <aside>
+                <h2>Minhas Notas</h2>
+                <ul id="notes-list">
+                    <!-- Lista de notas será gerada aqui -->
+                </ul>
+                <button id="new-note">Nova Nota</button>
+            </aside>
+
+            <main>
+                <textarea id="note-editor" placeholder="Escreva sua nota aqui..."></textarea>
+                <div id="preview">
+                    <!-- Pré-visualização em Markdown -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
