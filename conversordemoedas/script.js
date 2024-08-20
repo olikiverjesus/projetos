@@ -8,6 +8,15 @@ async function fetchRates() {
     const response = await fetch(API_URL);
     const data = await response.json();
     rates = data.rates;
+    
+    // Adicione EUR e BRL se não estiverem presentes
+    if (!rates.EUR) {
+      console.warn('Euro (EUR) não disponível na API');
+    }
+    if (!rates.BRL) {
+      console.warn('Real (BRL) não disponível na API');
+    }
+
     localStorage.setItem('rates', JSON.stringify(rates));
     populateCurrencyOptions();
   } catch (error) {
@@ -36,6 +45,10 @@ function populateCurrencyOptions() {
 }
 
 function convertCurrency(amount, fromCurrency, toCurrency) {
+  if (!rates[fromCurrency] || !rates[toCurrency]) {
+    alert('Moeda não disponível');
+    return '0.00';
+  }
   const rate = rates[toCurrency] / rates[fromCurrency];
   return (amount * rate).toFixed(2);
 }
