@@ -1,14 +1,14 @@
 /* Fonte e cores principais */
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #f5f7fa;
+  background-color: #f4f7fc;
   margin: 0;
   padding: 0;
   color: #333;
 }
 
 header {
-  background-color: #4caf50;
+  background-color: #2b3e50;
   color: white;
   padding: 20px 0;
   text-align: center;
@@ -36,7 +36,7 @@ h1 {
 }
 
 .balance-amount {
-  font-size: 2em;
+  font-size: 2.5em;
   font-weight: 700;
   color: #4caf50;
 }
@@ -49,6 +49,14 @@ h1 {
   margin-bottom: 20px;
 }
 
+.transaction-history h2 {
+  margin-bottom: 10px;
+}
+
+#transaction-months .month-group {
+  margin-bottom: 20px;
+}
+
 .transaction-history ul {
   list-style: none;
   padding: 0;
@@ -58,8 +66,10 @@ h1 {
 .transaction-history li {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 10px;
   border-bottom: 1px solid #e6e6e6;
+  position: relative;
 }
 
 .transaction-history li:last-child {
@@ -72,6 +82,26 @@ h1 {
 
 .transaction-history .plus {
   color: #4caf50;
+}
+
+.transaction-history .delete-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  font-size: 1em;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: background-color 0.3s ease;
+}
+
+.transaction-history .delete-btn:hover {
+  background-color: #d32f2f;
 }
 
 .add-transaction {

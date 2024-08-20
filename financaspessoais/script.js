@@ -1,66 +1,97 @@
-// Função para adicionar transação
-function adicionarTransacao() {
-  const descricao = document.getElementById('descricao').value;
-  const valor = parseFloat(document.getElementById('valor').value);
-  const tipo = document.getElementById('tipo').value;
+// Array para armazenar transações
+let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
 
-  if (!descricao || isNaN(valor)) {
-    alert('Por favor, insira uma descrição válida e um valor.');
+// Função para gerar ID único
+function generateID() {
+  return Math.floor(Math.random() * 100000000);
+}
+
+// Adicionar transação ao histórico
+function addTransaction(e) {
+  e.preventDefault();
+
+  const text = document.getElementById('transaction-text').value.trim();
+  const amount = +document.getElementById('transaction-amount').value.trim();
+
+  if (text === '' || isNaN(amount)) {
+    alert('Por favor, adicione uma descrição e um valor válido');
     return;
   }
 
-  // Salvar transação no Local Storage
-  let transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
-  transacoes.push({ descricao, valor, tipo });
-  localStorage.setItem('transacoes', JSON.stringify(transacoes));
+  const transaction = {
+    id: generateID(),
+    text,
+    amount,
+    date: new Date(),
+  };
 
-  // Atualizar visualização das transações e resumo
-  atualizarTransacoes();
-  atualizarResumo();
+  transactions.push(transaction);
+  addTransactionDOM(transaction);
+  updateBalance();
+  updateLocalStorage();
 
-  // Limpar campos de entrada
-  document.getElementById('descricao').value = '';
-  document.getElementById('valor').value = '';
-  document.getElementById('tipo').value = 'entrada';
+  document.getElementById('transaction-form').reset();
 }
 
-// Função para atualizar visualização das transações
-function atualizarTransacoes() {
-  const transacoesContainer = document.getElementById('transacoes');
-  transacoesContainer.innerHTML = '';
+// Adicionar transação ao DOM
+function addTransactionDOM(transaction) {
+  const list = document.createElement('ul');
+  const item = document.createElement('li');
+  const monthYear = new Date(transaction.date).toLocaleString('default', { month: 'long', year: 'numeric' });
+  
+  let monthGroup = document.querySelector(`[data-month="${monthYear}"]`);
 
-  const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
-  transacoes.forEach(transacao => {
-    const transacaoElement = document.createElement('div');
-    transacaoElement.classList.add('transacao', transacao.tipo);
-    transacaoElement.innerHTML = `<strong>${transacao.descricao}</strong> - R$ ${transacao.valor.toFixed(2)}`;
-    transacoesContainer.appendChild(transacaoElement);
-  });
+  if (!monthGroup) {
+    monthGroup = document.createElement('div');
+    monthGroup.classList.add('month-group');
+    monthGroup.dataset.month = monthYear;
+    const monthTitle = document.createElement('h3');
+    monthTitle.textContent = monthYear;
+    monthGroup.appendChild(monthTitle);
+    monthGroup.appendChild(list);
+    document.getElementById('transaction-months').appendChild(monthGroup);
+  } else {
+    list = monthGroup.querySelector('ul');
+  }
+
+  const sign = transaction.amount < 0 ? '-' : '+';
+
+  item.classList.add(transaction.amount < 0 ? 'minus' : 'plus');
+  item.innerHTML = `
+    ${transaction.text} <span>${sign}R$ ${Math.abs(transaction.amount).toFixed(2)}</span>
+    <button class="delete-btn" onclick="removeTransaction(${transaction.id})">x</button>
+  `;
+
+  list.appendChild(item);
 }
 
-// Função para atualizar o resumo financeiro
-function atualizarResumo() {
-  const transacoes = JSON.parse(localStorage.getItem('transacoes')) || [];
-  let totalEntradas = 0;
-  let totalSaidas = 0;
+// Atualizar saldo
+function updateBalance() {
+  const amounts = transactions.map(transaction => transaction.amount);
+  const total = amounts.reduce((acc, item) => (acc += item), 0).toFixed(2);
 
-  transacoes.forEach(transacao => {
-    if (transacao.tipo === 'entrada') {
-      totalEntradas += transacao.valor;
-    } else {
-      totalSaidas += transacao.valor;
-    }
-  });
-
-  const saldo = totalEntradas - totalSaidas;
-
-  document.getElementById('total-entradas').textContent = `R$ ${totalEntradas.toFixed(2)}`;
-  document.getElementById('total-saidas').textContent = `R$ ${totalSaidas.toFixed(2)}`;
-  document.getElementById('saldo').textContent = `R$ ${saldo.toFixed(2)}`;
+  document.getElementById('balance').textContent = `R$ ${total}`;
 }
 
-// Inicializar visualização das transações e resumo ao carregar a página
-document.addEventListener('DOMContentLoaded', () => {
-  atualizarTransacoes();
-  atualizarResumo();
-});
+// Remover transação
+function removeTransaction(id) {
+  transactions = transactions.filter(transaction => transaction.id !== id);
+  updateLocalStorage();
+  init();
+}
+
+// Atualizar localStorage
+function updateLocalStorage() {
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
+// Inicializar app
+function init() {
+  document.getElementById('transaction-months').innerHTML = '';
+  transactions.forEach(addTransactionDOM);
+  updateBalance();
+}
+
+init();
+
+document.getElementById('transaction-form').addEventListener('submit', addTransaction);
