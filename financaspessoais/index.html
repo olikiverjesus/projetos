@@ -1,123 +1,63 @@
-body {
-  font-family: 'Roboto', sans-serif;
-  background-color: #f4f4f4;
-  color: #333;
-  margin: 0;
-  padding: 0;
-}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciador de Finanças Pessoais</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Gerenciador de Finanças Pessoais</h1>
+  </header>
 
-header {
-  background: #007BFF;
-  color: #fff;
-  padding: 10px 0;
-  text-align: center;
-}
+  <div class="container">
+    <section class="balance">
+      <h2>Saldo Atual</h2>
+      <div id="balance" class="balance-amount">R$ 0,00</div>
+    </section>
 
-.container {
-  width: 80%;
-  max-width: 1200px;
-  margin: 20px auto;
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+    <section class="transaction-history">
+      <h2>Histórico de Transações</h2>
+      <div id="transaction-months"></div>
+      <button id="load-more" class="btn">Carregar Mais Histórico</button>
+    </section>
 
-h1, h2 {
-  margin: 0 0 20px;
-}
+    <section class="add-transaction">
+      <h2>Adicionar Nova Transação</h2>
+      <form id="transaction-form">
+        <div class="form-group">
+          <label for="transaction-text">Descrição</label>
+          <input type="text" id="transaction-text" placeholder="Ex: Salário, Compras">
+        </div>
+        <div class="form-group">
+          <label for="transaction-amount">Valor <br> (negativo - despesa, positivo - receita)</label>
+          <input type="number" id="transaction-amount" placeholder="Ex: -100, 500">
+        </div>
+        <div class="form-group">
+          <label for="transaction-category">Categoria</label>
+          <select id="transaction-category">
+            <option value="Salário">Salário</option>
+            <option value="Compras">Compras</option>
+            <option value="Alimentação">Alimentação</option>
+            <option value="Transporte">Transporte</option>
+            <option value="Lazer">Lazer</option>
+            <option value="Habitação">Habitação</option>
+            <option value="Saúde">Saúde</option>
+            <option value="Educação">Educação</option>
+            <option value="Outros">Outros</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="transaction-date">Data da Transação</label>
+          <input type="month" id="transaction-date">
+        </div>
+        <button type="submit" class="btn">Adicionar Transação</button>
+      </form>
+    </section>
+  </div>
 
-.balance {
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.balance-amount {
-  font-size: 2em;
-  font-weight: bold;
-  color: #007BFF;
-}
-
-.transaction-history, .add-transaction {
-  margin-bottom: 20px;
-}
-
-.add-transaction form {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-input[type="text"], input[type="number"], select, input[type="month"] {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-}
-
-button.btn {
-  background-color: #007BFF;
-  color: #fff;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-button.btn:hover {
-  background-color: #0056b3;
-}
-
-.month-group {
-  margin-bottom: 20px;
-}
-
-.month-group h3 {
-  margin: 0 0 10px;
-  font-size: 1.5em;
-}
-
-.month-group ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.month-group li {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-}
-
-.month-group li.plus {
-  background-color: #e0ffe0;
-}
-
-.month-group li.minus {
-  background-color: #ffe0e0;
-}
-
-.delete-btn {
-  background: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-.delete-btn:hover {
-  background: #c82333;
-}
+  <script src="script.js"></script>
+</body>
+</html>
