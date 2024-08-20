@@ -49,6 +49,11 @@ aside h2 {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#notes-list li:hover {
+    background-color: #f0f0f0;
 }
 
 #new-note {
@@ -75,6 +80,20 @@ main {
     font-size: 16px;
     line-height: 1.5;
     width: 100%;
+}
+
+#buttons-container {
+    margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+#buttons-container button {
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
 }
 
 #preview {
@@ -113,3 +132,6 @@ main {
     color: #f5f5f5;
 }
 
+.dark-mode #buttons-container button {
+    background-color: #555;
+}

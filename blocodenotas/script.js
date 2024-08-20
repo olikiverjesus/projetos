@@ -1,7 +1,7 @@
 // script.js
 
 let notes = JSON.parse(localStorage.getItem('notes')) || [];
-let currentNote = '';
+let currentNoteIndex = null;
 
 function renderNotesList() {
     const notesList = document.getElementById('notes-list');
@@ -16,33 +16,43 @@ function renderNotesList() {
 
 function saveNote() {
     const noteContent = document.getElementById('note-editor').value;
-    const title = noteContent.split('\n')[0]; // Primeiro título como título da nota
-    if (currentNote === '') {
-        // Nova nota
+    const title = noteContent.split('\n')[0] || "Nota sem título";
+
+    if (currentNoteIndex === null) {
         notes.push({ title, content: noteContent });
+        currentNoteIndex = notes.length - 1;
     } else {
-        // Editando nota existente
-        notes[currentNote].content = noteContent;
-        notes[currentNote].title = title;
+        notes[currentNoteIndex].content = noteContent;
+        notes[currentNoteIndex].title = title;
     }
+    
     localStorage.setItem('notes', JSON.stringify(notes));
     renderNotesList();
 }
 
 function loadNote(index) {
-    currentNote = index;
+    currentNoteIndex = index;
     const note = notes[index];
     document.getElementById('note-editor').value = note.content;
     renderMarkdown(note.content);
 }
 
 function newNote() {
-    currentNote = '';
+    currentNoteIndex = null;
     document.getElementById('note-editor').value = '';
+    document.getElementById('preview').innerHTML = '';
+}
+
+function deleteNote() {
+    if (currentNoteIndex !== null) {
+        notes.splice(currentNoteIndex, 1);
+        localStorage.setItem('notes', JSON.stringify(notes));
+        newNote();
+        renderNotesList();
+    }
 }
 
 function renderMarkdown(content) {
-    // Renderiza Markdown usando um parser, por exemplo, o `marked.js`
     document.getElementById('preview').innerHTML = marked(content);
 }
 
@@ -52,10 +62,11 @@ function toggleTheme() {
 
 document.getElementById('note-editor').addEventListener('input', () => {
     renderMarkdown(document.getElementById('note-editor').value);
-    saveNote();
 });
 
+document.getElementById('save-note').addEventListener('click', saveNote);
 document.getElementById('new-note').addEventListener('click', newNote);
+document.getElementById('delete-note').addEventListener('click', deleteNote);
 document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 
 renderNotesList();
