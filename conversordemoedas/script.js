@@ -1,5 +1,5 @@
 const API_KEY = 'YOUR_API_KEY'; // Substitua com sua chave da API
-const API_URL = `https://api.exchangerate-api.com/v4/latest/USD`; // API base URL
+const API_URL = `https://api.exchangerate-api.com/v4/latest/BRL`; // API base URL
 
 let rates = {};
 
