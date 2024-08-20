@@ -12,8 +12,8 @@ function addTransaction(e) {
   const category = document.getElementById('transaction-category').value;
   const date = new Date(document.getElementById('transaction-date').value);
 
-  if (text === '' || isNaN(amount)) {
-    alert('Por favor, adicione uma descrição e um valor válido');
+  if (text === '' || isNaN(amount) || isNaN(date.getTime())) {
+    alert('Por favor, adicione uma descrição, valor válido e uma data.');
     return;
   }
 
