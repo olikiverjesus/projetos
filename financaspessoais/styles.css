@@ -121,3 +121,8 @@ button.btn:hover {
 .delete-btn:hover {
   background: #c82333;
 }
+
+#load-more {
+  display: none;
+  margin-top: 20px;
+}

@@ -12,7 +12,7 @@ function addTransaction(e) {
   const text = document.getElementById('transaction-text').value.trim();
   const amount = +document.getElementById('transaction-amount').value.trim();
   const category = document.getElementById('transaction-category').value;
-  const date = new Date(document.getElementById('transaction-date').value);
+  const date = new Date(document.getElementById('transaction-date').value + '-01'); // Set day to 01
 
   if (text === '' || isNaN(amount) || isNaN(date.getTime())) {
     alert('Por favor, adicione uma descrição, valor válido e uma data.');
@@ -87,13 +87,21 @@ function init() {
   const paginatedTransactions = transactions.slice(currentPage * transactionsPerPage, (currentPage + 1) * transactionsPerPage);
   paginatedTransactions.forEach(addTransactionDOM);
   updateBalance();
+  
+  // Show or hide 'Load More' button
+  if (transactions.length > (currentPage + 1) * transactionsPerPage) {
+    document.getElementById('load-more').style.display = 'block';
+  } else {
+    document.getElementById('load-more').style.display = 'none';
+  }
 }
 
 function loadMoreHistory() {
   currentPage++;
   const nextTransactions = transactions.slice(currentPage * transactionsPerPage, (currentPage + 1) * transactionsPerPage);
   nextTransactions.forEach(addTransactionDOM);
-  if (nextTransactions.length === 0) {
+  // Hide 'Load More' button if no more transactions
+  if (transactions.length <= (currentPage + 1) * transactionsPerPage) {
     document.getElementById('load-more').style.display = 'none';
   }
 }
