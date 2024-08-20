@@ -1,4 +1,6 @@
 let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+const transactionsPerPage = 10;
+let currentPage = 0;
 
 function generateID() {
   return Math.floor(Math.random() * 100000000);
@@ -10,7 +12,7 @@ function addTransaction(e) {
   const text = document.getElementById('transaction-text').value.trim();
   const amount = +document.getElementById('transaction-amount').value.trim();
   const category = document.getElementById('transaction-category').value;
-  const date = new Date(document.getElementById('transaction-date').value);
+  const date = new Date(document.getElementById('transaction-date').value + '-01');
 
   if (text === '' || isNaN(amount) || isNaN(date.getTime())) {
     alert('Por favor, adicione uma descrição, valor válido e uma data.');
@@ -26,9 +28,8 @@ function addTransaction(e) {
   };
 
   transactions.push(transaction);
-  addTransactionDOM(transaction);
-  updateBalance();
   updateLocalStorage();
+  init();
 
   document.getElementById('transaction-form').reset();
 }
@@ -83,10 +84,18 @@ function updateLocalStorage() {
 
 function init() {
   document.getElementById('transaction-months').innerHTML = '';
-  transactions.forEach(addTransactionDOM);
+  const paginatedTransactions = transactions.slice(currentPage * transactionsPerPage, (currentPage + 1) * transactionsPerPage);
+  paginatedTransactions.forEach(addTransactionDOM);
   updateBalance();
 }
 
-init();
+function loadMoreHistory() {
+  currentPage++;
+  const nextTransactions = transactions.slice(currentPage * transactionsPerPage, (currentPage + 1) * transactionsPerPage);
+  nextTransactions.forEach(addTransactionDOM);
+}
 
 document.getElementById('transaction-form').addEventListener('submit', addTransaction);
+document.getElementById('load-more').addEventListener('click', loadMoreHistory);
+
+init();
