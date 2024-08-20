@@ -2,7 +2,6 @@
 
 let notes = JSON.parse(localStorage.getItem('notes')) || [];
 let currentNoteIndex = null;
-let isEditing = false;
 
 function renderNotesList() {
     const notesList = document.getElementById('notes-list');
@@ -19,7 +18,7 @@ function saveNote() {
     const noteContent = document.getElementById('note-editor').value;
     const title = noteContent.split('\n')[0] || "Nota sem título";
 
-    if (isEditing) {
+    if (currentNoteIndex !== null) {
         notes[currentNoteIndex].content = noteContent;
         notes[currentNoteIndex].title = title;
     } else {
@@ -29,6 +28,7 @@ function saveNote() {
     
     localStorage.setItem('notes', JSON.stringify(notes));
     renderNotesList();
+    newNote(); // Clear editor after saving
 }
 
 function loadNoteForView(index) {
@@ -36,22 +36,12 @@ function loadNoteForView(index) {
     const note = notes[index];
     document.getElementById('note-editor').value = note.content;
     renderMarkdown(note.content);
-    isEditing = false;
-}
-
-function loadNoteForEdit() {
-    if (currentNoteIndex !== null) {
-        isEditing = true;
-        const note = notes[currentNoteIndex];
-        document.getElementById('note-editor').value = note.content;
-    }
 }
 
 function newNote() {
     currentNoteIndex = null;
     document.getElementById('note-editor').value = '';
     document.getElementById('preview').innerHTML = '';
-    isEditing = false;
 }
 
 function deleteNote() {
@@ -76,7 +66,6 @@ document.getElementById('note-editor').addEventListener('input', () => {
 });
 
 document.getElementById('save-note').addEventListener('click', saveNote);
-document.getElementById('edit-note').addEventListener('click', loadNoteForEdit);
 document.getElementById('new-note').addEventListener('click', newNote);
 document.getElementById('delete-note').addEventListener('click', deleteNote);
 document.getElementById('theme-toggle').addEventListener('click', toggleTheme);

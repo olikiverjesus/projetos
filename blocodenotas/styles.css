@@ -1,39 +1,44 @@
-/* styles.css */
-
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
     color: #333;
     margin: 0;
     padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+    width: 90%;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 header {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    background-color: #6200ee;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
 }
 
 .notes-container {
     display: flex;
-    flex: 1;
+    height: 80vh;
 }
 
 aside {
-    width: 25%;
-    background-color: #f8f9fa;
-    padding: 10px;
-    border-right: 1px solid #ddd;
+    width: 30%;
+    background-color: #f4f4f4;
+    padding: 20px;
     overflow-y: auto;
+    border-right: 1px solid #ddd;
 }
 
 aside h2 {
@@ -41,28 +46,22 @@ aside h2 {
 }
 
 #notes-list {
-    list-style: none;
+    list-style-type: none;
     padding: 0;
 }
 
 #notes-list li {
+    background-color: #6200ee;
+    color: #fff;
     padding: 10px;
-    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+    border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 #notes-list li:hover {
-    background-color: #f0f0f0;
-}
-
-#new-note {
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    border: none;
-    width: 100%;
-    cursor: pointer;
+    background-color: #3700b3;
 }
 
 main {
@@ -73,65 +72,64 @@ main {
 }
 
 #note-editor {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    font-size: 16px;
-    line-height: 1.5;
     width: 100%;
+    height: 50%;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
 #buttons-container {
-    margin-bottom: 10px;
     display: flex;
     gap: 10px;
+    margin-bottom: 20px;
 }
 
 #buttons-container button {
-    background-color: #007bff;
-    color: white;
+    flex: 1;
     padding: 10px;
+    font-size: 16px;
+    background-color: #6200ee;
+    color: #fff;
     border: none;
+    border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#buttons-container button:hover {
+    background-color: #3700b3;
 }
 
 #preview {
     flex: 1;
     padding: 10px;
-    background-color: #ffffff;
     border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
     overflow-y: auto;
 }
 
 .dark-mode {
     background-color: #333;
-    color: #f5f5f5;
+    color: #f4f4f4;
 }
 
 .dark-mode header {
-    background-color: #555;
+    background-color: #333;
+    color: #fff;
 }
 
 .dark-mode aside {
     background-color: #444;
 }
 
-.dark-mode main {
-    background-color: #333;
-    color: #f5f5f5;
-}
-
-.dark-mode #note-editor {
+.dark-mode #notes-list li {
     background-color: #555;
-    color: #f5f5f5;
-}
-
-.dark-mode #preview {
-    background-color: #444;
-    color: #f5f5f5;
 }
 
 .dark-mode #buttons-container button {
-    background-color: #555;
+    background-color: #333;
 }
