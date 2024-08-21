@@ -1,57 +1,55 @@
-document.addEventListener('DOMContentLoaded', function () {
+// script.js
+
+document.addEventListener('DOMContentLoaded', function() {
   const subscriptions = [];
   const expenses = [];
-  const subscriptionNameInput = document.getElementById('subscription-name');
-  const subscriptionCostInput = document.getElementById('subscription-cost');
-  const subscriptionDateInput = document.getElementById('subscription-date');
-  const expenseCategoryInput = document.getElementById('expense-category');
-  const expenseAmountInput = document.getElementById('expense-amount');
-  const expenseDateInput = document.getElementById('expense-date');
-  const reminderDateInput = document.getElementById('reminder-date');
+
   const monthlySummary = document.getElementById('monthly-summary');
   const transactionsHistory = document.getElementById('transactions-history');
-  const loadMoreButton = document.getElementById('load-more');
   const expensesChart = document.getElementById('expenses-chart');
   const themeToggle = document.getElementById('theme-toggle');
 
-  // Adiciona uma assinatura
-  document.getElementById('add-subscription').addEventListener('click', function () {
-      const name = subscriptionNameInput.value;
-      const cost = parseFloat(subscriptionCostInput.value);
-      const date = new Date(subscriptionDateInput.value).toLocaleDateString();
-
+  document.getElementById('add-subscription').addEventListener('click', function() {
+      const name = document.getElementById('subscription-name').value;
+      const cost = parseFloat(document.getElementById('subscription-cost').value);
       if (name && !isNaN(cost)) {
-          const subscription = { name, cost, date };
-          subscriptions.push(subscription);
+          subscriptions.push({ name, cost, date: new Date().toLocaleDateString() });
           displaySummary();
           displayTransactions();
-          notifyUser('Assinatura adicionada com sucesso!');
       }
   });
 
-  // Adiciona um gasto
-  document.getElementById('add-expense').addEventListener('click', function () {
-      const category = expenseCategoryInput.value;
-      const amount = parseFloat(expenseAmountInput.value);
-      const date = new Date(expenseDateInput.value).toLocaleDateString();
-
-      if (category && !isNaN(amount)) {
-          const expense = { category, amount, date };
-          expenses.push(expense);
+  document.getElementById('add-expense').addEventListener('click', function() {
+      const name = document.getElementById('expense-name').value;
+      const amount = parseFloat(document.getElementById('expense-amount').value);
+      const category = document.getElementById('expense-category').value;
+      if (name && !isNaN(amount)) {
+          expenses.push({ name, amount, category, date: new Date().toLocaleDateString() });
           displaySummary();
           displayTransactions();
           updateChart();
-          notifyUser('Gasto adicionado com sucesso!');
       }
   });
 
-  // Adiciona um lembrete
-  document.getElementById('add-reminder').addEventListener('click', function () {
+  document.getElementById('add-category').addEventListener('click', function() {
+      const newCategory = document.getElementById('new-category').value;
+      if (newCategory) {
+          const li = document.createElement('li');
+          li.textContent = newCategory;
+          document.getElementById('category-list').appendChild(li);
+          document.getElementById('new-category').value = '';
+      }
+  });
+
+  document.getElementById('download-data').addEventListener('click', downloadData);
+  document.getElementById('upload-data').addEventListener('change', uploadData);
+
+  document.getElementById('add-reminder').addEventListener('click', function() {
+      const reminderDateInput = document.getElementById('reminder-date');
       const date = new Date(reminderDateInput.value).toLocaleDateString();
       notifyUser(`Lembrete adicionado para ${date}!`);
   });
 
-  // Exibe o resumo mensal
   function displaySummary() {
       let totalIncome = 0;
       let totalExpenses = 0;
@@ -68,60 +66,101 @@ document.addEventListener('DOMContentLoaded', function () {
       `;
   }
 
-  // Exibe as transações
   function displayTransactions() {
       transactionsHistory.innerHTML = '';
       [...subscriptions, ...expenses].forEach(transaction => {
           const li = document.createElement('li');
-          li.textContent = `${transaction.date} - ${transaction.name || transaction.category} - R$ ${transaction.cost || transaction.amount}`;
+          li.innerHTML = `
+              <span>${transaction.date} ${transaction.name}</span>
+              <span>${transaction.amount ? '-' : '+'} R$ ${Math.abs(transaction.amount).toFixed(2)}</span>
+              <button class="remove-transaction">x</button>
+          `;
           transactionsHistory.appendChild(li);
+      });
+      const removeButtons = document.querySelectorAll('.remove-transaction');
+      removeButtons.forEach(button => {
+          button.addEventListener('click', function() {
+              const transaction = this.parentElement;
+              const name = transaction.querySelector('span').textContent.split(' ')[1];
+              const amount = parseFloat(transaction.querySelector('span').textContent.split('R$ ')[1]);
+
+              // Remove transaction from arrays
+              subscriptions.splice(subscriptions.findIndex(sub => sub.name === name && sub.cost === amount), 1);
+              expenses.splice(expenses.findIndex(exp => exp.name === name && exp.amount === amount), 1);
+
+              displaySummary();
+              displayTransactions();
+              updateChart();
+          });
       });
   }
 
-  // Atualiza o gráfico de despesas
   function updateChart() {
       const ctx = expensesChart.getContext('2d');
-      const categories = [...new Set(expenses.map(exp => exp.category))];
-      const data = categories.map(cat => {
-          return expenses
-              .filter(exp => exp.category === cat)
-              .reduce((sum, exp) => sum + exp.amount, 0);
+      const categories = {};
+      
+      expenses.forEach(exp => {
+          categories[exp.category] = (categories[exp.category] || 0) + exp.amount;
       });
 
+      const labels = Object.keys(categories);
+      const data = Object.values(categories);
+
       new Chart(ctx, {
-          type: 'pie',
+          type: 'bar',
           data: {
-              labels: categories,
+              labels: labels,
               datasets: [{
+                  label: 'Despesas por Categoria',
                   data: data,
-                  backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
               }]
           },
           options: {
-              responsive: true,
-              plugins: {
-                  legend: {
-                      position: 'top',
-                  },
-                  tooltip: {
-                      callbacks: {
-                          label: function(tooltipItem) {
-                              return `${tooltipItem.label}: R$ ${tooltipItem.raw.toFixed(2)}`;
-                          }
-                      }
+              scales: {
+                  y: {
+                      beginAtZero: true
                   }
               }
           }
       });
   }
 
-  // Alternar tema
-  themeToggle.addEventListener('click', function () {
+  function downloadData() {
+      const data = JSON.stringify({ subscriptions, expenses });
+      const blob = new Blob([data], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'backup.json';
+      a.click();
+      URL.revokeObjectURL(url);
+  }
+
+  function uploadData(event) {
+      const file = event.target.files[0];
+      if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+              const data = JSON.parse(e.target.result);
+              subscriptions.length = 0;
+              expenses.length = 0;
+              subscriptions.push(...data.subscriptions);
+              expenses.push(...data.expenses);
+              displaySummary();
+              displayTransactions();
+              updateChart();
+          };
+          reader.readAsText(file);
+      }
+  }
+
+  themeToggle.addEventListener('click', function() {
       document.body.classList.toggle('dark-theme');
   });
 
-  // Notificar o usuário
-  function notifyUser(message) {
-      alert(message);
-  }
+  // Inicializar o gráfico
+  updateChart();
 });

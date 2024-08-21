@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,44 +7,64 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="app-container">
-        <h1>Gerenciador de Assinaturas e Gastos</h1>
-        
-        <!-- Seção para gerenciar assinaturas -->
-        <div class="subscription-controls">
-            <h2>Assinaturas</h2>
-            <input type="text" id="subscription-name" placeholder="Nome da Assinatura">
-            <input type="number" id="subscription-cost" placeholder="Custo">
-            <input type="date" id="subscription-date" placeholder="Data de Renovação">
-            <button id="add-subscription">Adicionar Assinatura</button>
-            <input type="date" id="reminder-date" placeholder="Data do Lembrete">
-            <button id="add-reminder">Adicionar Lembrete</button>
-        </div>
+    <div class="container">
+        <header>
+            <h1>Gerenciador de Assinaturas e Gastos</h1>
+            <button id="theme-toggle">Alternar Tema</button>
+        </header>
 
-        <!-- Seção para adicionar e visualizar gastos -->
-        <div class="expense-controls">
-            <h2>Adicionar Gastos</h2>
-            <input type="text" id="expense-category" placeholder="Categoria">
-            <input type="number" id="expense-amount" placeholder="Valor">
-            <input type="date" id="expense-date" placeholder="Data">
-            <button id="add-expense">Adicionar Gasto</button>
-        </div>
-
-        <!-- Seções para exibir histórico e gráficos -->
-        <div class="display-section">
+        <section class="summary">
             <h2>Resumo Mensal</h2>
             <div id="monthly-summary"></div>
+        </section>
+
+        <section class="transactions">
+            <h2>Adicionar Assinatura</h2>
+            <input type="text" id="subscription-name" placeholder="Nome da Assinatura">
+            <input type="number" id="subscription-cost" placeholder="Custo" step="0.01">
+            <button id="add-subscription">Adicionar Assinatura</button>
+
+            <h2>Adicionar Gasto</h2>
+            <input type="text" id="expense-name" placeholder="Nome do Gasto">
+            <input type="number" id="expense-amount" placeholder="Valor" step="0.01">
+            <input type="text" id="expense-category" placeholder="Categoria">
+            <button id="add-expense">Adicionar Gasto</button>
+
             <h2>Histórico de Transações</h2>
             <ul id="transactions-history"></ul>
             <button id="load-more">Carregar Mais</button>
-            <h2>Gráficos de Gastos</h2>
-            <canvas id="expenses-chart"></canvas>
-        </div>
+        </section>
 
-        <!-- Alternar tema -->
-        <button id="theme-toggle">Alternar Tema</button>
+        <section class="categories">
+            <h2>Categorias Personalizadas</h2>
+            <input type="text" id="new-category" placeholder="Nova Categoria">
+            <button id="add-category">Adicionar Categoria</button>
+            <ul id="category-list"></ul>
+        </section>
+
+        <section class="backup">
+            <button id="download-data">Baixar Dados</button>
+            <input type="file" id="upload-data" />
+        </section>
+
+        <section class="annual-summary">
+            <h2>Resumo Anual</h2>
+            <div id="annual-summary"></div>
+        </section>
+
+        <section class="reminders">
+            <h2>Adicionar Lembrete de Pagamento</h2>
+            <input type="date" id="reminder-date">
+            <button id="add-reminder">Adicionar Lembrete</button>
+        </section>
+
+        <section class="chart">
+            <h2>Gráfico de Despesas</h2>
+            <canvas id="expenses-chart"></canvas>
+        </section>
     </div>
-    <script src="script.js"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
