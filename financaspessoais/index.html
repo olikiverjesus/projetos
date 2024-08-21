@@ -1,63 +1,44 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gerenciador de Finanças Pessoais</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Assinaturas e Gastos</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <h1>Gerenciador de Finanças Pessoais</h1>
-  </header>
-
-  <div class="container">
-    <section class="balance">
-      <h2>Saldo Atual</h2>
-      <div id="balance" class="balance-amount">R$ 0,00</div>
-    </section>
-
-    <section class="transaction-history">
-      <h2>Histórico de Transações</h2>
-      <div id="transaction-months"></div>
-      <button id="load-more" class="btn">Carregar Mais Histórico</button>
-    </section>
-
-    <section class="add-transaction">
-      <h2>Adicionar Nova Transação</h2>
-      <form id="transaction-form">
-        <div class="form-group">
-          <label for="transaction-text">Descrição</label>
-          <input type="text" id="transaction-text" placeholder="Ex: Salário, Compras">
+    <div class="app-container">
+        <h1>Gerenciador de Assinaturas e Gastos</h1>
+        
+        <!-- Seção para gerenciar assinaturas -->
+        <div class="subscription-controls">
+            <h2>Assinaturas</h2>
+            <input type="text" id="subscription-name" placeholder="Nome da Assinatura">
+            <input type="number" id="subscription-cost" placeholder="Custo">
+            <input type="date" id="subscription-date" placeholder="Data de Renovação">
+            <button id="add-subscription">Adicionar Assinatura</button>
         </div>
-        <div class="form-group">
-          <label for="transaction-amount">Valor <br> (negativo - despesa, positivo - receita)</label>
-          <input type="number" id="transaction-amount" placeholder="Ex: -100, 500">
-        </div>
-        <div class="form-group">
-          <label for="transaction-category">Categoria</label>
-          <select id="transaction-category">
-            <option value="Salário">Salário</option>
-            <option value="Compras">Compras</option>
-            <option value="Alimentação">Alimentação</option>
-            <option value="Transporte">Transporte</option>
-            <option value="Lazer">Lazer</option>
-            <option value="Habitação">Habitação</option>
-            <option value="Saúde">Saúde</option>
-            <option value="Educação">Educação</option>
-            <option value="Outros">Outros</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="transaction-date">Data da Transação</label>
-          <input type="month" id="transaction-date">
-        </div>
-        <button type="submit" class="btn">Adicionar Transação</button>
-      </form>
-    </section>
-  </div>
 
-  <script src="script.js"></script>
+        <!-- Seção para adicionar e visualizar gastos -->
+        <div class="expense-controls">
+            <h2>Adicionar Gastos</h2>
+            <input type="text" id="expense-category" placeholder="Categoria">
+            <input type="number" id="expense-amount" placeholder="Valor">
+            <input type="date" id="expense-date" placeholder="Data">
+            <button id="add-expense">Adicionar Gasto</button>
+        </div>
+
+        <!-- Seções para exibir histórico -->
+        <div class="display-section">
+            <h2>Resumo Mensal</h2>
+            <div id="monthly-summary"></div>
+            <h2>Histórico de Transações</h2>
+            <ul id="transactions-history"></ul>
+        </div>
+
+        <!-- Alternar tema -->
+        <button id="theme-toggle">Alternar Tema</button>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>

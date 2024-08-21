@@ -1,113 +1,86 @@
-let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-const transactionsPerPage = 10;
-let currentPage = 0;
+document.addEventListener('DOMContentLoaded', function () {
+  const subscriptions = [];
+  const expenses = [];
+  const subscriptionNameInput = document.getElementById('subscription-name');
+  const subscriptionCostInput = document.getElementById('subscription-cost');
+  const subscriptionDateInput = document.getElementById('subscription-date');
+  const expenseCategoryInput = document.getElementById('expense-category');
+  const expenseAmountInput = document.getElementById('expense-amount');
+  const expenseDateInput = document.getElementById('expense-date');
+  const monthlySummary = document.getElementById('monthly-summary');
+  const transactionsHistory = document.getElementById('transactions-history');
+  const themeToggle = document.getElementById('theme-toggle');
 
-function generateID() {
-  return Math.floor(Math.random() * 100000000);
-}
+  // Adiciona uma assinatura
+  document.getElementById('add-subscription').addEventListener('click', function () {
+      const name = subscriptionNameInput.value;
+      const cost = parseFloat(subscriptionCostInput.value);
+      const date = new Date(subscriptionDateInput.value).toLocaleDateString();
 
-function addTransaction(e) {
-  e.preventDefault();
+      if (name && !isNaN(cost)) {
+          const subscription = { name, cost, date };
+          subscriptions.push(subscription);
+          displaySummary();
+          displayTransactions();
+          notifyUser('Assinatura adicionada com sucesso!');
+      }
+  });
 
-  const text = document.getElementById('transaction-text').value.trim();
-  const amount = +document.getElementById('transaction-amount').value.trim();
-  const category = document.getElementById('transaction-category').value;
-  const dateInput = document.getElementById('transaction-date').value;
-  const date = new Date(dateInput + '-01'); // Set day to 01
+  // Adiciona um gasto
+  document.getElementById('add-expense').addEventListener('click', function () {
+      const category = expenseCategoryInput.value;
+      const amount = parseFloat(expenseAmountInput.value);
+      const date = new Date(expenseDateInput.value).toLocaleDateString();
 
-  if (text === '' || isNaN(amount) || isNaN(date.getTime())) {
-    alert('Por favor, adicione uma descrição, valor válido e uma data.');
-    return;
+      if (category && !isNaN(amount)) {
+          const expense = { category, amount, date };
+          expenses.push(expense);
+          displaySummary();
+          displayTransactions();
+          notifyUser('Gasto adicionado com sucesso!');
+      }
+  });
+
+  // Exibe o resumo mensal
+  function displaySummary() {
+      let totalSubscriptions = 0;
+      let totalExpenses = 0;
+
+      subscriptions.forEach(sub => totalSubscriptions += sub.cost);
+      expenses.forEach(exp => totalExpenses += exp.amount);
+
+      monthlySummary.innerHTML = `
+          <p><strong>Total de Assinaturas:</strong> R$ ${totalSubscriptions.toFixed(2)}</p>
+          <p><strong>Total de Gastos:</strong> R$ ${totalExpenses.toFixed(2)}</p>
+          <p><strong>Saldo Atual:</strong> R$ ${(totalSubscriptions - totalExpenses).toFixed(2)}</p>
+      `;
   }
 
-  const transaction = {
-    id: generateID(),
-    text,
-    amount,
-    category,
-    date
-  };
-
-  transactions.push(transaction);
-  updateLocalStorage();
-  init();
-
-  document.getElementById('transaction-form').reset();
-}
-
-function addTransactionDOM(transaction) {
-  const list = document.createElement('ul');
-  const monthYear = transaction.date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
-
-  let monthGroup = document.querySelector(`[data-month="${monthYear}"]`);
-
-  if (!monthGroup) {
-    monthGroup = document.createElement('div');
-    monthGroup.classList.add('month-group');
-    monthGroup.dataset.month = monthYear;
-    const monthTitle = document.createElement('h3');
-    monthTitle.textContent = monthYear;
-    monthGroup.appendChild(monthTitle);
-    monthGroup.appendChild(list);
-    document.getElementById('transaction-months').appendChild(monthGroup);
-  } else {
-    list = monthGroup.querySelector('ul');
+  // Exibe o histórico de transações
+  function displayTransactions() {
+      transactionsHistory.innerHTML = '';
+      [...subscriptions, ...expenses].forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = `${item.date}: ${item.name || item.category} - R$ ${item.cost || item.amount.toFixed(2)}`;
+          transactionsHistory.appendChild(li);
+      });
   }
 
-  const sign = transaction.amount < 0 ? '-' : '+';
-
-  const item = document.createElement('li');
-  item.classList.add(transaction.amount < 0 ? 'minus' : 'plus');
-  item.innerHTML = `
-    ${transaction.text} (${transaction.category}) <span>${sign}R$ ${Math.abs(transaction.amount).toFixed(2)}</span>
-    <button class="delete-btn" onclick="removeTransaction(${transaction.id})">x</button>
-  `;
-
-  list.appendChild(item);
-}
-
-function updateBalance() {
-  const amounts = transactions.map(transaction => transaction.amount);
-  const total = amounts.reduce((acc, item) => acc + item, 0).toFixed(2);
-
-  document.getElementById('balance').textContent = `R$ ${total}`;
-}
-
-function removeTransaction(id) {
-  transactions = transactions.filter(transaction => transaction.id !== id);
-  updateLocalStorage();
-  init();
-}
-
-function updateLocalStorage() {
-  localStorage.setItem('transactions', JSON.stringify(transactions));
-}
-
-function init() {
-  document.getElementById('transaction-months').innerHTML = '';
-  const paginatedTransactions = transactions.slice(currentPage * transactionsPerPage, (currentPage + 1) * transactionsPerPage);
-  paginatedTransactions.forEach(addTransactionDOM);
-  updateBalance();
-  
-  // Show or hide 'Load More' button
-  if (transactions.length > (currentPage + 1) * transactionsPerPage) {
-    document.getElementById('load-more').style.display = 'block';
-  } else {
-    document.getElementById('load-more').style.display = 'none';
+  // Notifica o usuário
+  function notifyUser(message) {
+      if (Notification.permission === "granted") {
+          new Notification(message);
+      } else if (Notification.permission !== "denied") {
+          Notification.requestPermission().then(permission => {
+              if (permission === "granted") {
+                  new Notification(message);
+              }
+          });
+      }
   }
-}
 
-function loadMoreHistory() {
-  currentPage++;
-  const nextTransactions = transactions.slice(currentPage * transactionsPerPage, (currentPage + 1) * transactionsPerPage);
-  nextTransactions.forEach(addTransactionDOM);
-  // Hide 'Load More' button if no more transactions
-  if (transactions.length <= (currentPage + 1) * transactionsPerPage) {
-    document.getElementById('load-more').style.display = 'none';
-  }
-}
-
-document.getElementById('transaction-form').addEventListener('submit', addTransaction);
-document.getElementById('load-more').addEventListener('click', loadMoreHistory);
-
-init();
+  // Alterna o tema da aplicação
+  themeToggle.addEventListener('click', function () {
+      document.body.classList.toggle('dark-theme');
+  });
+});
