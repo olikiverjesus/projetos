@@ -1,9 +1,9 @@
 // script.js
 
 document.addEventListener('DOMContentLoaded', function() {
-  const incomes = [];
-  const expenses = [];
-  const categories = [];
+  const incomes = JSON.parse(localStorage.getItem('incomes')) || [];
+  const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+  const categories = JSON.parse(localStorage.getItem('categories')) || [];
   let transactionsHistoryLimit = 10;
 
   const monthlySummary = document.getElementById('monthly-summary');
@@ -12,11 +12,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const themeToggle = document.getElementById('theme-toggle');
   const loadMoreButton = document.getElementById('load-more');
   
+  // Initialize
+  displaySummary();
+  displayTransactions();
+  updateChart();
+
   document.getElementById('add-income').addEventListener('click', function() {
       const name = document.getElementById('income-name').value;
       const amount = parseFloat(document.getElementById('income-amount').value);
       if (name && !isNaN(amount)) {
           incomes.push({ name, amount, date: new Date().toLocaleDateString() });
+          localStorage.setItem('incomes', JSON.stringify(incomes));
           displaySummary();
           displayTransactions();
       }
@@ -28,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const category = document.getElementById('expense-category').value;
       if (name && !isNaN(amount)) {
           expenses.push({ name, amount, category, date: new Date().toLocaleDateString() });
+          localStorage.setItem('expenses', JSON.stringify(expenses));
           displaySummary();
           displayTransactions();
           updateChart();
@@ -38,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const newCategory = document.getElementById('new-category').value;
       if (newCategory && !categories.includes(newCategory)) {
           categories.push(newCategory);
+          localStorage.setItem('categories', JSON.stringify(categories));
           const li = document.createElement('li');
           li.textContent = newCategory;
           document.getElementById('category-list').appendChild(li);
@@ -100,8 +108,17 @@ document.addEventListener('DOMContentLoaded', function() {
               const amount = parseFloat(transaction.querySelector('span').textContent.split('R$ ')[1]);
 
               // Remove transaction from arrays
-              incomes.splice(incomes.findIndex(inc => inc.name === name && inc.amount === amount), 1);
-              expenses.splice(expenses.findIndex(exp => exp.name === name && exp.amount === amount), 1);
+              const indexIncomes = incomes.findIndex(inc => inc.name === name && inc.amount === amount);
+              if (indexIncomes !== -1) {
+                  incomes.splice(indexIncomes, 1);
+                  localStorage.setItem('incomes', JSON.stringify(incomes));
+              } else {
+                  const indexExpenses = expenses.findIndex(exp => exp.name === name && exp.amount === amount);
+                  if (indexExpenses !== -1) {
+                      expenses.splice(indexExpenses, 1);
+                      localStorage.setItem('expenses', JSON.stringify(expenses));
+                  }
+              }
 
               displaySummary();
               displayTransactions();
@@ -121,7 +138,11 @@ document.addEventListener('DOMContentLoaded', function() {
       const labels = Object.keys(categoriesData);
       const data = Object.values(categoriesData);
 
-      new Chart(ctx, {
+      if (window.chart) {
+          window.chart.destroy();
+      }
+
+      window.chart = new Chart(ctx, {
           type: 'bar',
           data: {
               labels: labels,
@@ -160,10 +181,15 @@ document.addEventListener('DOMContentLoaded', function() {
           const reader = new FileReader();
           reader.onload = function (e) {
               const data = JSON.parse(e.target.result);
+              localStorage.setItem('incomes', JSON.stringify(data.incomes));
+              localStorage.setItem('expenses', JSON.stringify(data.expenses));
+              localStorage.setItem('categories', JSON.stringify(data.categories));
               incomes.length = 0;
               expenses.length = 0;
+              categories.length = 0;
               incomes.push(...data.incomes);
               expenses.push(...data.expenses);
+              categories.push(...data.categories);
               displaySummary();
               displayTransactions();
               updateChart();
@@ -180,7 +206,4 @@ document.addEventListener('DOMContentLoaded', function() {
       transactionsHistoryLimit += 10;
       displayTransactions();
   });
-
-  // Inicializar o gráfico
-  updateChart();
 });
