@@ -6,16 +6,20 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f7f7f7;
     color: #333;
     line-height: 1.6;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 40px auto;
     padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 header {
@@ -26,7 +30,7 @@ header {
 }
 
 header h1 {
-    font-size: 24px;
+    font-size: 28px;
     color: #007bff;
 }
 
@@ -38,7 +42,7 @@ header button {
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 header button:hover {
@@ -61,31 +65,40 @@ aside {
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+#search-bar:focus, #category-filter:focus {
+    border-color: #007bff;
 }
 
 #notes-list {
     list-style: none;
     padding-left: 0;
+    max-height: 400px;
+    overflow-y: auto;
 }
 
 #notes-list li {
     padding: 15px;
-    background: #fff;
+    background: #f1f1f1;
     margin-bottom: 10px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s;
-    border: 1px solid #ddd;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 #notes-list li:hover {
-    background: #f1f1f1;
+    background: #007bff;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
 }
 
 main {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    align-items: stretch;
 }
 
 #note-title {
@@ -94,6 +107,11 @@ main {
     border-radius: 5px;
     border: 1px solid #ccc;
     margin-bottom: 10px;
+    transition: border-color 0.3s ease;
+}
+
+#note-title:focus {
+    border-color: #007bff;
 }
 
 #toolbar {
@@ -109,7 +127,9 @@ main {
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-weight: bold;
+    font-size: 18px;
+    transition: background-color 0.3s ease;
 }
 
 #toolbar button:hover {
@@ -125,11 +145,17 @@ main {
     margin-bottom: 10px;
     resize: vertical;
     min-height: 200px;
+    transition: border-color 0.3s ease;
+}
+
+#note-editor:focus {
+    border-color: #007bff;
 }
 
 #buttons-container {
     display: flex;
     gap: 10px;
+    margin-top: 10px;
 }
 
 #save-note, #delete-note {
@@ -140,7 +166,7 @@ main {
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
 }
 
 #delete-note {
@@ -157,9 +183,39 @@ main {
 
 #preview {
     padding: 15px;
-    background-color: #fff;
+    background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 5px;
     margin-top: 20px;
     white-space: pre-wrap;
+}
+
+.dark-theme {
+    background-color: #1e1e1e;
+    color: #f7f7f7;
+}
+
+.dark-theme .container {
+    background: #2e2e2e;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dark-theme header h1, .dark-theme #toolbar button {
+    color: #f7f7f7;
+}
+
+.dark-theme #search-bar, .dark-theme #category-filter, .dark-theme #note-title, .dark-theme #note-editor {
+    background-color: #3e3e3e;
+    color: #f7f7f7;
+    border-color: #555;
+}
+
+.dark-theme #notes-list li {
+    background: #3e3e3e;
+    border-color: #555;
+}
+
+.dark-theme #preview {
+    background-color: #2e2e2e;
+    border-color: #555;
 }
