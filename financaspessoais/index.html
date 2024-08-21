@@ -17,6 +17,8 @@
             <input type="number" id="subscription-cost" placeholder="Custo">
             <input type="date" id="subscription-date" placeholder="Data de Renovação">
             <button id="add-subscription">Adicionar Assinatura</button>
+            <input type="date" id="reminder-date" placeholder="Data do Lembrete">
+            <button id="add-reminder">Adicionar Lembrete</button>
         </div>
 
         <!-- Seção para adicionar e visualizar gastos -->
@@ -28,17 +30,21 @@
             <button id="add-expense">Adicionar Gasto</button>
         </div>
 
-        <!-- Seções para exibir histórico -->
+        <!-- Seções para exibir histórico e gráficos -->
         <div class="display-section">
             <h2>Resumo Mensal</h2>
             <div id="monthly-summary"></div>
             <h2>Histórico de Transações</h2>
             <ul id="transactions-history"></ul>
+            <button id="load-more">Carregar Mais</button>
+            <h2>Gráficos de Gastos</h2>
+            <canvas id="expenses-chart"></canvas>
         </div>
 
         <!-- Alternar tema -->
         <button id="theme-toggle">Alternar Tema</button>
     </div>
     <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>

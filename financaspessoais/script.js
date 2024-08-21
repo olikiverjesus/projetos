@@ -7,8 +7,11 @@ document.addEventListener('DOMContentLoaded', function () {
   const expenseCategoryInput = document.getElementById('expense-category');
   const expenseAmountInput = document.getElementById('expense-amount');
   const expenseDateInput = document.getElementById('expense-date');
+  const reminderDateInput = document.getElementById('reminder-date');
   const monthlySummary = document.getElementById('monthly-summary');
   const transactionsHistory = document.getElementById('transactions-history');
+  const loadMoreButton = document.getElementById('load-more');
+  const expensesChart = document.getElementById('expenses-chart');
   const themeToggle = document.getElementById('theme-toggle');
 
   // Adiciona uma assinatura
@@ -37,50 +40,88 @@ document.addEventListener('DOMContentLoaded', function () {
           expenses.push(expense);
           displaySummary();
           displayTransactions();
+          updateChart();
           notifyUser('Gasto adicionado com sucesso!');
       }
   });
 
+  // Adiciona um lembrete
+  document.getElementById('add-reminder').addEventListener('click', function () {
+      const date = new Date(reminderDateInput.value).toLocaleDateString();
+      notifyUser(`Lembrete adicionado para ${date}!`);
+  });
+
   // Exibe o resumo mensal
   function displaySummary() {
-      let totalSubscriptions = 0;
+      let totalIncome = 0;
       let totalExpenses = 0;
 
-      subscriptions.forEach(sub => totalSubscriptions += sub.cost);
+      subscriptions.forEach(sub => totalIncome += sub.cost);
       expenses.forEach(exp => totalExpenses += exp.amount);
 
+      const balance = totalIncome - totalExpenses;
+
       monthlySummary.innerHTML = `
-          <p><strong>Total de Assinaturas:</strong> R$ ${totalSubscriptions.toFixed(2)}</p>
-          <p><strong>Total de Gastos:</strong> R$ ${totalExpenses.toFixed(2)}</p>
-          <p><strong>Saldo Atual:</strong> R$ ${(totalSubscriptions - totalExpenses).toFixed(2)}</p>
+          <p><strong>Renda Total:</strong> R$ ${totalIncome.toFixed(2)}</p>
+          <p><strong>Gastos Totais:</strong> R$ ${totalExpenses.toFixed(2)}</p>
+          <p><strong>Saldo Atual:</strong> R$ ${balance.toFixed(2)}</p>
       `;
   }
 
-  // Exibe o histórico de transações
+  // Exibe as transações
   function displayTransactions() {
       transactionsHistory.innerHTML = '';
-      [...subscriptions, ...expenses].forEach(item => {
+      [...subscriptions, ...expenses].forEach(transaction => {
           const li = document.createElement('li');
-          li.textContent = `${item.date}: ${item.name || item.category} - R$ ${item.cost || item.amount.toFixed(2)}`;
+          li.textContent = `${transaction.date} - ${transaction.name || transaction.category} - R$ ${transaction.cost || transaction.amount}`;
           transactionsHistory.appendChild(li);
       });
   }
 
-  // Notifica o usuário
-  function notifyUser(message) {
-      if (Notification.permission === "granted") {
-          new Notification(message);
-      } else if (Notification.permission !== "denied") {
-          Notification.requestPermission().then(permission => {
-              if (permission === "granted") {
-                  new Notification(message);
+  // Atualiza o gráfico de despesas
+  function updateChart() {
+      const ctx = expensesChart.getContext('2d');
+      const categories = [...new Set(expenses.map(exp => exp.category))];
+      const data = categories.map(cat => {
+          return expenses
+              .filter(exp => exp.category === cat)
+              .reduce((sum, exp) => sum + exp.amount, 0);
+      });
+
+      new Chart(ctx, {
+          type: 'pie',
+          data: {
+              labels: categories,
+              datasets: [{
+                  data: data,
+                  backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+              }]
+          },
+          options: {
+              responsive: true,
+              plugins: {
+                  legend: {
+                      position: 'top',
+                  },
+                  tooltip: {
+                      callbacks: {
+                          label: function(tooltipItem) {
+                              return `${tooltipItem.label}: R$ ${tooltipItem.raw.toFixed(2)}`;
+                          }
+                      }
+                  }
               }
-          });
-      }
+          }
+      });
   }
 
-  // Alterna o tema da aplicação
+  // Alternar tema
   themeToggle.addEventListener('click', function () {
       document.body.classList.toggle('dark-theme');
   });
+
+  // Notificar o usuário
+  function notifyUser(message) {
+      alert(message);
+  }
 });
