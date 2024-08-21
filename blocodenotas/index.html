@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,42 +7,30 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Bloco de Notas</h1>
-            <button id="toggle-theme">Alternar Tema</button>
-        </header>
-
-        <div class="notes-container">
-            <aside>
-                <input type="text" id="search-bar" placeholder="Buscar notas...">
-                <select id="category-filter">
-                    <option value="all">Todas as Categorias</option>
-                    <option value="work">Trabalho</option>
-                    <option value="personal">Pessoal</option>
-                    <option value="home">Casa</option>
-                </select>
-                <ul id="notes-list">
-                    <!-- Lista de notas será gerada dinamicamente -->
-                </ul>
-            </aside>
-
-            <main>
-                <input type="text" id="note-title" placeholder="Título da Nota">
-                <div id="toolbar">
-                    <button id="bold-btn">Negrito</button>
-                    <button id="bullet-btn">Lista com Marcadores</button>
-                </div>
-                <textarea id="note-editor" placeholder="Escreva sua nota aqui..."></textarea>
-                <div id="buttons-container">
-                    <button id="save-note">Salvar Nota</button>
-                    <button id="delete-note">Excluir Nota</button>
-                </div>
-                <div id="preview"></div>
-            </main>
+    <div class="app-container">
+        <h1>Bloco de Notas</h1>
+        <div class="note-controls">
+            <input type="text" id="note-title" placeholder="Título da Nota">
+            <textarea id="note-editor" placeholder="Escreva sua nota aqui..."></textarea>
+            <input type="text" id="note-tags" placeholder="Adicionar etiquetas separadas por vírgula">
+            <div class="options">
+                <label for="category-filter">Categoria:</label>
+                <select id="category-filter"></select>
+                <button id="add-category">Adicionar Categoria</button>
+            </div>
+            <div class="options">
+                <label for="favorite-note">Favoritar Nota</label>
+                <input type="checkbox" id="favorite-note">
+            </div>
+            <button id="save-note">Salvar Nota</button>
+            <button id="share-note">Compartilhar Nota</button>
+            <button id="theme-toggle">Alternar Tema</button>
+        </div>
+        <div class="note-list">
+            <h2>Notas Salvas</h2>
+            <ul id="notes-display"></ul>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
