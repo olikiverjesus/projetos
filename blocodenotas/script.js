@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const categoryFilter = document.getElementById('category-filter');
     const notesDisplay = document.getElementById('notes-display');
     const themeToggle = document.getElementById('theme-toggle');
+    const shareOptions = document.getElementById('share-options');
     
     // Atualiza a lista de categorias no select
     function updateCategoryOptions() {
@@ -87,12 +88,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Compartilha uma nota via email
     function shareNote() {
+        shareOptions.classList.toggle('hidden');
+    }
+
+    // Gera e copia um link para compartilhar a nota
+    function shareByLink() {
+        const title = document.getElementById('note-title').value;
+        const content = document.getElementById('note-editor').value;
+        const link = `${window.location.href}?title=${encodeURIComponent(title)}&content=${encodeURIComponent(content)}`;
+        navigator.clipboard.writeText(link).then(() => {
+            alert('Link copiado para a área de transferência!');
+        });
+    }
+
+    // Gera um PDF da nota
+    function downloadPDF() {
         const title = document.getElementById('note-title').value;
         const content = document.getElementById('note-editor').value;
 
-        const noteContent = encodeURIComponent(content);
-        const mailtoLink = `mailto:?subject=${encodeURIComponent(title)}&body=${noteContent}`;
-        window.location.href = mailtoLink;
+        const pdfWindow = window.open('', '', 'width=800,height=600');
+        pdfWindow.document.write(`
+            <html>
+            <head>
+                <title>${title}</title>
+            </head>
+            <body>
+                <h1>${title}</h1>
+                <p>${content}</p>
+            </body>
+            </html>
+        `);
+        pdfWindow.document.close();
+        pdfWindow.print();
     }
 
     // Notifica o usuário
@@ -115,6 +142,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('save-note').addEventListener('click', saveNote);
     document.getElementById('share-note').addEventListener('click', shareNote);
+    document.getElementById('share-link').addEventListener('click', shareByLink);
+    document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+    document.getElementById('share-email').addEventListener('click', () => {
+        const title = document.getElementById('note-title').value;
+        const content = document.getElementById('note-editor').value;
+
+        const noteContent = encodeURIComponent(content);
+        const mailtoLink = `mailto:?subject=${encodeURIComponent(title)}&body=${noteContent}`;
+        window.location.href = mailtoLink;
+    });
     document.getElementById('add-category').addEventListener('click', addCategory);
 
     updateCategoryOptions();

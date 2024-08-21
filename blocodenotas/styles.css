@@ -113,3 +113,8 @@ h1, h2 {
 .dark-theme .note-controls button:hover {
     background-color: #0a58ca;
 }
+
+/* Código CSS permanece o mesmo, exceto pela adição da classe hidden */
+.hidden {
+    display: none;
+}
