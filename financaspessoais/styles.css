@@ -42,7 +42,7 @@ input, select {
   box-sizing: border-box;
 }
 
-h2 {
+h1, h2 {
   color: #007bff;
 }
 

@@ -1,67 +1,52 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciador de Ganhos e Gastos</title>
+    <title>Gerenciador de Finanças</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Gerenciador de Ganhos e Gastos</h1>
-            <button id="theme-toggle">Alternar Tema</button>
-        </header>
+        <h1>Gerenciador de Finanças</h1>
+        <div id="monthly-summary">
+            <!-- Resumo mensal será exibido aqui -->
+        </div>
+        
+        <h2>Adicionar Ganho</h2>
+        <input type="text" id="income-name" placeholder="Nome do Ganho" />
+        <input type="number" id="income-amount" placeholder="Valor" />
+        <input type="month" id="income-month" placeholder="Mês do Ganho" />
+        <button id="add-income">Adicionar Ganho</button>
 
-        <section class="summary">
-            <h2>Resumo Mensal</h2>
-            <div id="monthly-summary"></div>
-        </section>
+        <h2>Adicionar Gasto</h2>
+        <input type="text" id="expense-name" placeholder="Nome do Gasto" />
+        <input type="number" id="expense-amount" placeholder="Valor" />
+        <select id="expense-category">
+            <option value="alimentacao">Alimentação</option>
+            <option value="transporte">Transporte</option>
+            <option value="moradia">Moradia</option>
+            <option value="saude">Saúde</option>
+            <option value="lazer">Lazer</option>
+            <!-- Outras categorias aqui -->
+        </select>
+        <input type="month" id="expense-month" placeholder="Mês do Gasto" />
+        <button id="add-expense">Adicionar Gasto</button>
 
-        <section class="transactions">
-            <h2>Adicionar Ganho do Mês</h2>
-            <input type="text" id="income-name" placeholder="Nome do Ganho">
-            <input type="number" id="income-amount" placeholder="Valor" step="0.01">
-            <button id="add-income">Adicionar Ganho</button>
+        <div id="transactions-history">
+            <!-- Histórico de transações será exibido aqui -->
+        </div>
+        <button id="load-more" style="display: none;">Carregar mais</button>
+        
+        <h2>Gráfico de Despesas</h2>
+        <canvas id="expenses-chart"></canvas>
 
-            <h2>Adicionar Gasto</h2>
-            <input type="text" id="expense-name" placeholder="Nome do Gasto">
-            <input type="number" id="expense-amount" placeholder="Valor" step="0.01">
-            <input type="text" id="expense-category" placeholder="Categoria">
-            <button id="add-expense">Adicionar Gasto</button>
+        <h2>Backup e Restore</h2>
+        <button id="backup">Fazer Backup</button>
+        <input type="file" id="upload" accept=".json" />
+        <button id="restore">Restaurar Backup</button>
 
-            <h2>Histórico de Transações</h2>
-            <ul id="transactions-history"></ul>
-            <button id="load-more">Carregar Mais</button>
-        </section>
-
-        <section class="categories">
-            <h2>Categorias Personalizadas</h2>
-            <input type="text" id="new-category" placeholder="Nova Categoria">
-            <button id="add-category">Adicionar Categoria</button>
-            <ul id="category-list"></ul>
-        </section>
-
-        <section class="backup">
-            <button id="download-data">Baixar Dados</button>
-            <input type="file" id="upload-data" />
-        </section>
-
-        <section class="annual-summary">
-            <h2>Resumo Anual</h2>
-            <div id="annual-summary"></div>
-        </section>
-
-        <section class="reminders">
-            <h2>Adicionar Lembrete de Pagamento</h2>
-            <input type="date" id="reminder-date">
-            <button id="add-reminder">Adicionar Lembrete</button>
-        </section>
-
-        <section class="chart">
-            <h2>Gráfico de Despesas</h2>
-            <canvas id="expenses-chart"></canvas>
-        </section>
+        <button id="theme-toggle">Alternar Tema</button>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

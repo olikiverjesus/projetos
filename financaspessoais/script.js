@@ -1,5 +1,3 @@
-// script.js
-
 document.addEventListener('DOMContentLoaded', function() {
   const incomes = JSON.parse(localStorage.getItem('incomes')) || [];
   const expenses = JSON.parse(localStorage.getItem('expenses')) || [];
@@ -20,8 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('add-income').addEventListener('click', function() {
       const name = document.getElementById('income-name').value;
       const amount = parseFloat(document.getElementById('income-amount').value);
-      if (name && !isNaN(amount)) {
-          incomes.push({ name, amount, date: new Date().toLocaleDateString() });
+      const month = document.getElementById('income-month').value;
+      if (name && !isNaN(amount) && month) {
+          incomes.push({ name, amount, date: new Date().toLocaleDateString(), month });
           localStorage.setItem('incomes', JSON.stringify(incomes));
           displaySummary();
           displayTransactions();
@@ -32,8 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
       const name = document.getElementById('expense-name').value;
       const amount = parseFloat(document.getElementById('expense-amount').value);
       const category = document.getElementById('expense-category').value;
-      if (name && !isNaN(amount)) {
-          expenses.push({ name, amount, category, date: new Date().toLocaleDateString() });
+      const month = document.getElementById('expense-month').value;
+      if (name && !isNaN(amount) && category && month) {
+          expenses.push({ name, amount, category, date: new Date().toLocaleDateString(), month });
           localStorage.setItem('expenses', JSON.stringify(expenses));
           displaySummary();
           displayTransactions();
@@ -41,30 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
   });
 
-  document.getElementById('add-category').addEventListener('click', function() {
-      const newCategory = document.getElementById('new-category').value;
-      if (newCategory && !categories.includes(newCategory)) {
-          categories.push(newCategory);
-          localStorage.setItem('categories', JSON.stringify(categories));
-          const li = document.createElement('li');
-          li.textContent = newCategory;
-          document.getElementById('category-list').appendChild(li);
-          document.getElementById('new-category').value = '';
-      }
-  });
-
-  document.getElementById('download-data').addEventListener('click', downloadData);
-  document.getElementById('upload-data').addEventListener('change', uploadData);
-
-  document.getElementById('add-reminder').addEventListener('click', function() {
-      const reminderDateInput = document.getElementById('reminder-date');
-      const date = new Date(reminderDateInput.value).toLocaleDateString();
-      notifyUser(`Lembrete adicionado para ${date}!`);
-  });
-
-  themeToggle.addEventListener('click', function() {
-      document.body.classList.toggle('dark-theme');
-  });
+  // Other event listeners ...
 
   function displaySummary() {
       let totalIncome = incomes.reduce((acc, curr) => acc + curr.amount, 0);
@@ -87,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
       transactionsToDisplay.forEach(transaction => {
           const li = document.createElement('li');
           li.innerHTML = `
-              <span>${transaction.date} ${transaction.name}</span>
+              <span>${transaction.date} ${transaction.name} (${transaction.month})</span>
               <span>${transaction.amount ? '-' : '+'} R$ ${Math.abs(transaction.amount).toFixed(2)}</span>
               <button class="remove-transaction">x</button>
           `;
