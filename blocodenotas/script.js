@@ -1,50 +1,43 @@
-let notes = JSON.parse(localStorage.getItem('notes')) || [];
-let currentNoteIndex = null;
+document.getElementById('toggle-theme').addEventListener('click', function() {
+    document.body.classList.toggle('dark-theme');
+});
 
-function renderNotesList() {
-    const notesList = document.getElementById('notes-list');
-    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
-    const categoryFilter = document.getElementById('category-filter').value;
+document.getElementById('bold-btn').addEventListener('click', function() {
+    document.execCommand('bold');
+});
+
+document.getElementById('bullet-btn').addEventListener('click', function() {
+    document.execCommand('insertUnorderedList');
+});
+
+// Função para salvar as notas
+document.getElementById('save-note').addEventListener('click', function() {
+    let title = document.getElementById('note-title').value;
+    let content = document.getElementById('note-editor').value;
     
-    notesList.innerHTML = '';
-    notes
-        .filter(note => 
-            (categoryFilter === '' || note.category === categoryFilter) &&
-            (note.title.toLowerCase().includes(searchQuery) || note.content.toLowerCase().includes(searchQuery))
-        )
-        .forEach((note, index) => {
-            const li = document.createElement('li');
-            li.textContent = note.title || `Nota sem título (${index + 1})`;
-            li.addEventListener('click', () => loadNoteForView(index));
-            li.className = note.completed ? 'completed' : '';
-            notesList.appendChild(li);
-        });
-}
-
-function saveNote() {
-    const noteContent = document.getElementById('note-editor').value;
-    const noteTitle = document.getElementById('note-title').value;
-    const title = noteTitle || noteContent.split('\n')[0] || "Nota sem título";
-
-    if (currentNoteIndex !== null) {
-        notes[currentNoteIndex].content = noteContent;
-        notes[currentNoteIndex].title = title;
+    if (title && content) {
+        // Salvar no armazenamento local
+        localStorage.setItem(title, content);
+        alert('Nota salva!');
     } else {
-        notes.push({ title, content: noteContent, category: document.getElementById('category-filter').value, completed: false });
-        currentNoteIndex = notes.length - 1;
+        alert('Título e conteúdo são obrigatórios.');
     }
-    
-    localStorage.setItem('notes', JSON.stringify(notes));
-    renderNotesList();
-    newNote(); // Clear editor after saving
-}
+});
 
-function toggleCompletion() {
-    if (currentNoteIndex !== null) {
-        notes[currentNoteIndex].completed = !notes[currentNoteIndex].completed;
-        localStorage.setItem('notes', JSON.stringify(notes));
-        renderNotesList();
+// Carrega as notas do armazenamento local na inicialização
+window.onload = function() {
+    let notesList = document.getElementById('notes-list');
+    for (let i = 0; i < localStorage.length; i++) {
+        let key = localStorage.key(i);
+        let noteItem = document.createElement('li');
+        noteItem.textContent = key;
+        notesList.appendChild(noteItem);
     }
-}
+};
 
-/* Adicionar as funções existentes e novas */
+// Função para excluir a nota selecionada
+document.getElementById('delete-note').addEventListener('click', function() {
+    let title = document.getElementById('note-title').value;
+    localStorage.removeItem(title);
+    alert('Nota excluída!');
+});
