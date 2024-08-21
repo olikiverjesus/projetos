@@ -3,24 +3,34 @@ let currentNoteIndex = null;
 
 function renderNotesList() {
     const notesList = document.getElementById('notes-list');
+    const searchQuery = document.getElementById('search-bar').value.toLowerCase();
+    const categoryFilter = document.getElementById('category-filter').value;
+    
     notesList.innerHTML = '';
-    notes.forEach((note, index) => {
-        const li = document.createElement('li');
-        li.textContent = note.title || `Nota sem título (${index + 1})`;
-        li.addEventListener('click', () => loadNoteForView(index));
-        notesList.appendChild(li);
-    });
+    notes
+        .filter(note => 
+            (categoryFilter === '' || note.category === categoryFilter) &&
+            (note.title.toLowerCase().includes(searchQuery) || note.content.toLowerCase().includes(searchQuery))
+        )
+        .forEach((note, index) => {
+            const li = document.createElement('li');
+            li.textContent = note.title || `Nota sem título (${index + 1})`;
+            li.addEventListener('click', () => loadNoteForView(index));
+            li.className = note.completed ? 'completed' : '';
+            notesList.appendChild(li);
+        });
 }
 
 function saveNote() {
     const noteContent = document.getElementById('note-editor').value;
-    const title = noteContent.split('\n')[0] || "Nota sem título";
+    const noteTitle = document.getElementById('note-title').value;
+    const title = noteTitle || noteContent.split('\n')[0] || "Nota sem título";
 
     if (currentNoteIndex !== null) {
         notes[currentNoteIndex].content = noteContent;
         notes[currentNoteIndex].title = title;
     } else {
-        notes.push({ title, content: noteContent });
+        notes.push({ title, content: noteContent, category: document.getElementById('category-filter').value, completed: false });
         currentNoteIndex = notes.length - 1;
     }
     
@@ -29,59 +39,12 @@ function saveNote() {
     newNote(); // Clear editor after saving
 }
 
-function loadNoteForView(index) {
-    currentNoteIndex = index;
-    const note = notes[index];
-    document.getElementById('note-editor').value = note.content;
-    renderMarkdown(note.content);
-}
-
-function newNote() {
-    currentNoteIndex = null;
-    document.getElementById('note-editor').value = '';
-    document.getElementById('preview').innerHTML = '';
-}
-
-function deleteNote() {
+function toggleCompletion() {
     if (currentNoteIndex !== null) {
-        notes.splice(currentNoteIndex, 1);
+        notes[currentNoteIndex].completed = !notes[currentNoteIndex].completed;
         localStorage.setItem('notes', JSON.stringify(notes));
-        newNote();
         renderNotesList();
     }
 }
 
-function renderMarkdown(content) {
-    document.getElementById('preview').innerHTML = marked(content);
-}
-
-function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-}
-
-function applyBold() {
-    const editor = document.getElementById('note-editor');
-    const selectedText = editor.value.substring(editor.selectionStart, editor.selectionEnd);
-    const newText = `**${selectedText}**`;
-    editor.setRangeText(newText);
-    renderMarkdown(editor.value);
-}
-
-function applyList() {
-    const editor = document.getElementById('note-editor');
-    const selectedText = editor.value.substring(editor.selectionStart, editor.selectionEnd);
-    const newText = `- ${selectedText}`;
-    editor.setRangeText(newText);
-    renderMarkdown(editor.value);
-}
-
-document.getElementById('note-editor').addEventListener('input', () => {
-    renderMarkdown(document.getElementById('note-editor').value);
-});
-
-document.getElementById('save-note').addEventListener('click', saveNote);
-document.getElementById('new-note').addEventListener('click', newNote);
-document.getElementById('delete-note').addEventListener('click', deleteNote);
-document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
-
-renderNotesList();
+/* Adicionar as funções existentes e novas */

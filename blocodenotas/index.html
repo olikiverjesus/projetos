@@ -3,24 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bloco de Notas</title>
+    <title>Bloco de Notas Completo</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Bloco de Notas</h1>
+            <h1>Bloco de Notas Completo</h1>
             <button id="theme-toggle">Alterar Tema</button>
         </header>
 
         <div class="notes-container">
             <aside>
                 <h2>Minhas Notas</h2>
+                <input type="text" id="search-bar" placeholder="Buscar notas...">
                 <ul id="notes-list"></ul>
                 <button id="new-note">Nova Nota</button>
+                <select id="category-filter">
+                    <option value="">Todas as Categorias</option>
+                    <option value="Trabalho">Trabalho</option>
+                    <option value="Pessoal">Pessoal</option>
+                    <option value="Estudos">Estudos</option>
+                </select>
             </aside>
 
             <main>
+                <input type="text" id="note-title" placeholder="Título da Nota">
                 <textarea id="note-editor" placeholder="Escreva sua nota aqui..."></textarea>
                 <div id="buttons-container">
                     <button id="save-note">Salvar Nota</button>
@@ -29,6 +37,7 @@
                 <div id="toolbar">
                     <button onclick="applyBold()">B</button>
                     <button onclick="applyList()">•</button>
+                    <button onclick="toggleCompletion()">✔</button>
                 </div>
                 <div id="preview"></div>
             </main>
