@@ -73,11 +73,15 @@ section h2 {
 
 ul {
   list-style: none;
+  padding: 0;
 }
 
 ul li {
-  padding: 5px;
+  padding: 10px;
   border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 button#load-more {
@@ -122,4 +126,17 @@ button#load-more {
   background-color: #e6f7ff;
   border-radius: 8px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+button.remove-transaction {
+  background-color: #dc3545;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+}
+
+button.remove-transaction:hover {
+  background-color: #c82333;
 }

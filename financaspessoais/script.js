@@ -1,19 +1,22 @@
 // script.js
 
 document.addEventListener('DOMContentLoaded', function() {
-  const subscriptions = [];
+  const incomes = [];
   const expenses = [];
+  const categories = [];
+  let transactionsHistoryLimit = 10;
 
   const monthlySummary = document.getElementById('monthly-summary');
   const transactionsHistory = document.getElementById('transactions-history');
   const expensesChart = document.getElementById('expenses-chart');
   const themeToggle = document.getElementById('theme-toggle');
-
-  document.getElementById('add-subscription').addEventListener('click', function() {
-      const name = document.getElementById('subscription-name').value;
-      const cost = parseFloat(document.getElementById('subscription-cost').value);
-      if (name && !isNaN(cost)) {
-          subscriptions.push({ name, cost, date: new Date().toLocaleDateString() });
+  const loadMoreButton = document.getElementById('load-more');
+  
+  document.getElementById('add-income').addEventListener('click', function() {
+      const name = document.getElementById('income-name').value;
+      const amount = parseFloat(document.getElementById('income-amount').value);
+      if (name && !isNaN(amount)) {
+          incomes.push({ name, amount, date: new Date().toLocaleDateString() });
           displaySummary();
           displayTransactions();
       }
@@ -33,7 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById('add-category').addEventListener('click', function() {
       const newCategory = document.getElementById('new-category').value;
-      if (newCategory) {
+      if (newCategory && !categories.includes(newCategory)) {
+          categories.push(newCategory);
           const li = document.createElement('li');
           li.textContent = newCategory;
           document.getElementById('category-list').appendChild(li);
@@ -50,25 +54,29 @@ document.addEventListener('DOMContentLoaded', function() {
       notifyUser(`Lembrete adicionado para ${date}!`);
   });
 
-  function displaySummary() {
-      let totalIncome = 0;
-      let totalExpenses = 0;
+  themeToggle.addEventListener('click', function() {
+      document.body.classList.toggle('dark-theme');
+  });
 
-      subscriptions.forEach(sub => totalIncome += sub.cost);
-      expenses.forEach(exp => totalExpenses += exp.amount);
+  function displaySummary() {
+      let totalIncome = incomes.reduce((acc, curr) => acc + curr.amount, 0);
+      let totalExpenses = expenses.reduce((acc, curr) => acc + curr.amount, 0);
 
       const balance = totalIncome - totalExpenses;
 
       monthlySummary.innerHTML = `
-          <p><strong>Renda Total:</strong> R$ ${totalIncome.toFixed(2)}</p>
-          <p><strong>Gastos Totais:</strong> R$ ${totalExpenses.toFixed(2)}</p>
-          <p><strong>Saldo Atual:</strong> R$ ${balance.toFixed(2)}</p>
+          <p>Saldo Atual: R$ ${balance.toFixed(2)}</p>
+          <p>Ganhos do Mês: R$ ${totalIncome.toFixed(2)}</p>
+          <p>Gastos do Mês: R$ ${totalExpenses.toFixed(2)}</p>
       `;
   }
 
   function displayTransactions() {
       transactionsHistory.innerHTML = '';
-      [...subscriptions, ...expenses].forEach(transaction => {
+      const allTransactions = [...incomes, ...expenses];
+      const transactionsToDisplay = allTransactions.slice(-transactionsHistoryLimit);
+
+      transactionsToDisplay.forEach(transaction => {
           const li = document.createElement('li');
           li.innerHTML = `
               <span>${transaction.date} ${transaction.name}</span>
@@ -77,6 +85,13 @@ document.addEventListener('DOMContentLoaded', function() {
           `;
           transactionsHistory.appendChild(li);
       });
+
+      if (allTransactions.length > transactionsHistoryLimit) {
+          loadMoreButton.style.display = 'block';
+      } else {
+          loadMoreButton.style.display = 'none';
+      }
+
       const removeButtons = document.querySelectorAll('.remove-transaction');
       removeButtons.forEach(button => {
           button.addEventListener('click', function() {
@@ -85,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
               const amount = parseFloat(transaction.querySelector('span').textContent.split('R$ ')[1]);
 
               // Remove transaction from arrays
-              subscriptions.splice(subscriptions.findIndex(sub => sub.name === name && sub.cost === amount), 1);
+              incomes.splice(incomes.findIndex(inc => inc.name === name && inc.amount === amount), 1);
               expenses.splice(expenses.findIndex(exp => exp.name === name && exp.amount === amount), 1);
 
               displaySummary();
@@ -97,14 +112,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function updateChart() {
       const ctx = expensesChart.getContext('2d');
-      const categories = {};
+      const categoriesData = {};
       
       expenses.forEach(exp => {
-          categories[exp.category] = (categories[exp.category] || 0) + exp.amount;
+          categoriesData[exp.category] = (categoriesData[exp.category] || 0) + exp.amount;
       });
 
-      const labels = Object.keys(categories);
-      const data = Object.values(categories);
+      const labels = Object.keys(categoriesData);
+      const data = Object.values(categoriesData);
 
       new Chart(ctx, {
           type: 'bar',
@@ -129,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function downloadData() {
-      const data = JSON.stringify({ subscriptions, expenses });
+      const data = JSON.stringify({ incomes, expenses });
       const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -145,9 +160,9 @@ document.addEventListener('DOMContentLoaded', function() {
           const reader = new FileReader();
           reader.onload = function (e) {
               const data = JSON.parse(e.target.result);
-              subscriptions.length = 0;
+              incomes.length = 0;
               expenses.length = 0;
-              subscriptions.push(...data.subscriptions);
+              incomes.push(...data.incomes);
               expenses.push(...data.expenses);
               displaySummary();
               displayTransactions();
@@ -157,8 +172,13 @@ document.addEventListener('DOMContentLoaded', function() {
       }
   }
 
-  themeToggle.addEventListener('click', function() {
-      document.body.classList.toggle('dark-theme');
+  function notifyUser(message) {
+      alert(message);
+  }
+
+  loadMoreButton.addEventListener('click', function() {
+      transactionsHistoryLimit += 10;
+      displayTransactions();
   });
 
   // Inicializar o gráfico
